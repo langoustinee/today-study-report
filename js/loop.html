@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>loop [for, while, do-while] test</title>
+</head>
+<body>
+    
+</body>
+<script>
+    // let n = parseInt(prompt("숫자를 입력하세요."));
+    // for(let i=0; i<n; i++) {
+    //     console.log("Hello world! - for");
+    // }
+
+    // while(n != 0) {
+    //     console.log("Hello world! - while");
+    //     n--;
+    // }
+
+    // let food = ["apple", "banana", "grape"];
+    // let people = {"name":"mark", "age":26};
+
+    // for(let fruit in food) {
+    //     console.log(fruit, food[fruit]);
+    // }
+
+    // for(let person in people) {
+    //     console.log(person, people[person]);
+    // }
+
+    // for(let i=0; i<5; i++) {
+    //     for(let j=i; j<5; j++) {
+    //         document.write("*");
+    //     }
+    //     document.write("<br>");
+    // }
+
+    // for(let i=0; i<5; i++) {
+    //     if(i < 3) {
+    //         for(let j=0; j<=i; j++) {
+    //             document.write("*");
+    //         }
+    //     }
+    //     else {
+    //         for(let j=0; j<=i-i; j++) {
+    //             document.write("*");
+    //         }
+    //     }
+    //     document.write("<br>");
+    // }
+
+    let N = parseInt(prompt("숫자를 입력하세요."));
+    let idx = 0;
+    for(let i=0; i<N; i++) {
+        for(let j=0; j<i+N; j++) {
+            console.log((i+j)-j, N-1);
+            if((i+j) == N-1 || (i+N-1) == j) {
+                document.write(idx);
+                idx++;
+            }
+            else if(i == N-1 || (i+j)-j == N-1) {
+                document.write(j-1);
+            }
+            else document.write("^");
+        }
+        document.write("<br>");
+    }
+
+
+
+</script>
+</html>
