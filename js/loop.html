@@ -57,14 +57,17 @@
     for(let i=0; i<N; i++) {
         for(let j=0; j<i+N; j++) {
             console.log((i+j)-j, N-1);
-            if((i+j) == N-1 || (i+N-1) == j) {
-                document.write(idx);
-                idx++;
+            if(i < N-1) {
+                if((i+j) == N-1 || (i+N-1) == j) {
+                    document.write(idx);
+                    idx++;
+                }
+                else document.write("^");
             }
-            else if(i == N-1 || (i+j)-j == N-1) {
+            else if(i == N-1) {
                 document.write(j-1);
             }
-            else document.write("^");
+            
         }
         document.write("<br>");
     }
