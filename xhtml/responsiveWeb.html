@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Web Design Test</title>
+    <style>
+        #imgBox {
+            background-color: blue;
+        }
+
+        #imgBox img {
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        @media screen and (max-width: 960px) {
+            body {
+                background-color: yellow;
+            }
+        }
+
+        @media screen and (min-width: 720px) {
+            #imgBox img {
+                width: 50%;
+            }            
+        }
+    </style>
+</head>
+<body>
+    <div id="imgBox">
+        <img src="https://biz.chosun.com/resizer/Wrqn1MAY6kwoIxF427cC3MnLNDM=/616x0/smart/cloudfront-ap-northeast-1.images.arcpublishing.com/chosunbiz/LBVC6JZW4VED7HENKI6P6NLNYY.jpg" width="300" height="300"/>
+    </div>
+</body>
+</html>
