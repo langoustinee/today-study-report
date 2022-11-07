@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>seletor test</title>
+    </head>
+    <style>
+        h1 > em, p > em {
+            background-color: orange;
+        }
+
+        h1:hover {
+            color: green;
+        }
+
+        img {
+            vertical-align: top;
+            background-attachment: fixed;
+        }
+
+        span {
+            text-shadow: 2px 2px 1px silver;
+            vertical-align: sub;
+            font-size: 0.8em;
+        }
+
+        .ol-list {
+            list-style-type: none;
+            list-style-image: url("./images/btn.png");
+        }
+
+        #gradiant {
+            width: 100px;
+            height: 100px;
+            background: orange;
+            background: repeating-linear-gradient(yellow, red 20px);
+        }
+
+    </style>
+    <body>
+        <h1>Hello <em id="gradiant">World!</em></h1>
+        <p>Hello <em>Code!</em></p>
+        <br>
+        <img src="./images/girls.jpg" width="200" height="200" />
+        소녀<span>시</span>대
+        <br>
+
+        <ol class="ol-list">
+            <li>list1</li>
+            <li>list2</li>
+            <li>list3</li>
+            <li>list4</li>
+        </ol>
+
+        <br>
+
+        <table>
+            <tr>
+                <td>Name</td>
+                <td>content</td>
+            </tr>
+        </table>
+        <div style="width: 200px; height: 100px; overflow: auto;">
+            <table style="width: 320px;">
+                <tr>
+                    <td width="150px">Name</td>
+                    <td width="150px">content</td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <td width="150px">Name</td>
+                    <td width="150px">content</td>
+                </tr>
+            </table>
+            <table>
+            <tr>
+                <td width="150px">Name</td>
+                <td width="150px">content</td>
+            </tr>
+        </table>
+        </div>
+    </body>
+</html>
