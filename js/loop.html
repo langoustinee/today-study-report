@@ -54,23 +54,33 @@
 
     let N = parseInt(prompt("숫자를 입력하세요."));
     let idx = 0;
-    for(let i=0; i<N; i++) {
-        for(let j=0; j<i+N; j++) {
-            console.log((i+j)-j, N-1);
-            if(i < N-1) {
-                if((i+j) == N-1 || (i+N-1) == j) {
-                    document.write(idx);
-                    idx++;
-                }
-                else document.write("^");
-            }
-            else if(i == N-1) {
-                document.write(j-1);                
-            }
+    
+    // for(let i=0; i<N; i++) {
+    //     for(let j=0; j<i+N; j++) {
+    //         if(i < N-1) {
+    //             if((i+j) == N-1 || (i+N-1) == j) {
+    //                 document.write(idx);
+    //                 idx++;
+    //             }
+    //             else document.write("^");
+    //         }
+    //         else {
+    //             if(j == 0) document.write(idx);
+    //             else document.write(j-1);
+    //         }    
+    //     }
+    //     document.write("<br>");
+    // }
+
+    for(let k=0, idx=0; k<N; k++, idx++) {
+        for(let l=0; l<k+N; l++) {
+            console.log(idx, idx % N);
+            
+            
+            document.write("*");
         }
         document.write("<br>");
     }
-
 
 
 </script>

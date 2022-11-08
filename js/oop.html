@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OOP test</title>
+</head>
+<body>
+    
+</body>
+<script>
+    let obj = {
+        "name":"adam",
+        "title":"programmer"
+    }
+
+    console.log(obj, obj.name, obj.title);
+    obj.name = "hawa";
+    obj.title = "human";
+
+    console.log(obj, obj.name, obj.title);
+
+    with(obj) {
+        console.log(name, title);
+    }
+
+    // this test
+    // 화살표 함수에서는 사용불가
+    // 꼭 객체 내 메서드에서 this를 붙이자.
+    let movie = {
+        "title":"titan",
+        "getTitle": function() {
+            // return title;
+            return this.title;
+        }
+    }
+
+    console.log(movie.getTitle());
+
+
+
+    // 생성자 함수
+
+    // 일반 함수
+    // function Post(title, content) {
+    //     this.title = title;
+    //     this.content = content;
+    // }
+
+    // 함수표현식
+    let post = function(title="제목 없음", content="내용 없음") {
+        this.title = title;
+        this.content = content;
+    }
+
+    // default 생성자
+    let defaultPost = function() {
+        this.title = "기본 게시글 제목입니다.";
+        this.content = "기본 게시글의 내용입니다.";
+    }
+
+    let postInstance = new post("첫번째 게시글", "첫번째 게시글 내용입니다.");
+    console.log(postInstance);
+
+    let defaultInstance = new defaultPost();
+    console.log(defaultInstance);
+
+    let emptyPost = new post();
+    console.log(emptyPost);
+
+
+
+</script>
+</html>
