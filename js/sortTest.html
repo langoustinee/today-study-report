@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Array Test</title>
+</head>
+<script>
+    // sort
+    // 선택정렬, 버블정렬, 힙정렬, 병합정렬, 퀵정렬, 삽입정렬 등이 있다.
+    // 이 중 퀵정렬은 면접에서 설명할 수 있어야 한다.
+    let StringNoList = ["첫번째", "두번째", "세번째"];
+    let IntegerNoList = [200, 30, 17];
+
+    console.log(StringNoList.sort());
+
+    // 정수배열을 문자배열로 변환하여 정렬하기에 17,200,30으로 정렬된다.
+    console.log(IntegerNoList.sort());
+    console.log(IntegerNoList.sort().reverse())
+
+
+    // 더 클 떄, 같을 때, 작을 때는 x-y값으로 판단할 수 있다. 그래서 오름차순 정렬이 된다.
+    IntegerNoList.sort((x, y) => {
+        return x-y;
+    })
+    console.log(IntegerNoList);
+
+    // y-x값으로 내림차순 정렬할 수 있다.
+    IntegerNoList.sort((x, y) => {
+        return y-x;
+    })
+    console.log(IntegerNoList);
+
+    
+    
+    // 문자열 오름차순 정렬은 뺼셈이 안되기에 문자열의 크기 비교를 해야한다.
+    StringNoList.sort((a, b) => {
+        if(a > b) return 1;
+        else return -1;
+    })
+    console.log(StringNoList);
+
+    // 문자열 내림차순 정렬은 뺼셈이 안되기에 문자열의 크기 비교를 해야한다.
+    StringNoList.sort((a, b) => {
+        if(a < b) return 1;
+        else return -1;
+    })
+    console.log(StringNoList);
+
+
+
+
+
+
+    // 인스턴스를 만드는 생성자 작성
+    // function Post(nikname, title, content, date) {
+    //     this.nikname = nikname;
+    //     this.title = title;
+    //     this.content = content;
+    //     this.date = date;
+
+    //     this.toString = function() {
+    //         return this.nikname + ` 사용자가  ${title}이라는 제목을,  ${content}이라는 내용의 글을 작성했습니다. 작성일시: ${date}`;
+    //     }
+    // }
+
+    // let Post = class  {
+    //     constructor(nikname, title, content) {
+    //         this.nikname = nikname;
+    //         this.title = title;
+    //         this.content = content;
+    //     }
+    // }
+
+
+    // let posts = [
+    //     new Post("hong", "제목1", "내용1", new Date(2022, 4, 1)),
+    //     new Post("joon", "제목2", "내용2", new Date(2022, 6, 21)),
+    //     new Post("sampu", "제목3", "내용3", new Date(2022, 1, 31)),
+    //     new Post("gogi", "제목4", "내용4", new Date(2022, 10, 5))
+    // ];
+
+    // console.log(posts);
+    // console.log(posts[1].toString(), posts[0].toString());
+
+    // posts.sort((a, b) => {
+    //     return a.nikname - b.nikname;
+    // })
+    // console.log(posts);
+
+
+    // 1 name 오름차순, 2 name 내림차순
+    // 3 price의 오름차순, 4 price의 내림차순
+    // 5 date의 오름차순, 6 date 내림차순
+    // 니머지는 입력 순서대로 정렬
+
+    function Book(name, price, date) {
+        this.name = name;
+        this.price = price;
+        this.date = date;
+        this.toString = function() {
+            return name + ", " + price + ", " + date;
+        }
+    }
+
+    let books = [
+        new Book("생활코딩", "21000", new Date(2022, 10, 5)),
+        new Book("웹프로그래밍1", "17800", new Date(2022, 1, 12)),
+        new Book("개발바닥", "35000", new Date(2022, 4, 20)),
+        new Book("스프링 실전", "15600", new Date(2022, 7, 30)),
+    ];
+
+    let cmd = parseInt(prompt("숫자를 입력하세요."));
+    let res = [];
+
+    switch(cmd) {
+        case 1:
+            console.log("!!!");
+            res = books.sort((a, b) => {
+                if(a.name > b.name) return 1;
+                else return -1;
+            })
+            break;
+        case 2:
+            res = books.sort((a, b) => {
+                if(a.name < b.name) return 1;
+                else return -1;
+            })
+            break;
+        case 3:
+            res = books.sort((a, b) => {
+                return a.price - b.price;
+            })
+            break;
+        case 4:
+            res = books.sort((a, b) => {
+                return b.price - a.price;
+            })
+            break;
+        case 5:
+            res = books.sort((a, b) => {
+                return a.date.getTime() - b.date.getTime();
+            })
+            break;
+        case 6:
+            res = books.sort((a, b) => {
+                return b.date.getTime() - a.date.getTime();
+            })
+            break;
+        default:
+            res = books;
+            break;
+    }
+    console.log(res);
+
+</script>
+<body>
+    
+</body>
+</html>

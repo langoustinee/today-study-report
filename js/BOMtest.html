@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BOM test</title>
+</head>
+<body>
+    <div id="display"></div>
+</body>
+<script>
+
+    let liveText = ["Java", "JavaScript", "Python", "NodeJS", "react"];
+    let idx = 0;
+    setInterval(() => {
+        document.getElementById("display").innerHTML = liveText[idx % liveText.length];
+        idx++;
+    }, 2000);
+
+    console.log(navigator.userAgent);
+
+    // OS 검증 코드는 대부분 주로 서버단에서 작성한다.
+    let winOs = ["win"];
+    for(os of winOs) {
+        if(navigator.userAgent.toLowerCase().indexOf("win") >= 0) {
+            console.log("윈도우 OS 입니다.");
+            break;
+        }
+    }
+
+</script>
+</html>

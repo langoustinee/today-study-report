@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Array Test</title>
+</head>
+<script>
+    
+    let cloth = ["니트", "맨투맨", "티셔츠"];
+    let pant = ["청바지", "치노팬츠", "츄리닝"];
+
+    let clothAndPant = cloth.concat(pant);
+    console.log(clothAndPant);
+
+    for(fashion of clothAndPant) console.log(fashion);
+
+    // unshift: 처음에 데이터를 추가하고 처음에 삽입한 데이터를 제거
+    cloth.unshift("셔츠");
+    console.log(cloth);
+
+    // push: 나중에 값 추가
+    // pop: 나중 값 제거
+    cloth.push("난닝구");
+    console.log(cloth);
+    cloth.pop();
+    console.log(cloth);
+
+
+    // sort
+    // 선택정렬, 버블정렬, 힙정렬, 병합정렬, 퀵정렬, 삽입정렬 등이 있다.
+    // 이 중 퀵정렬은 면접에서 설명할 수 있어야 한다.
+    let noList = []
+
+
+</script>
+<body>
+    
+</body>
+</html>

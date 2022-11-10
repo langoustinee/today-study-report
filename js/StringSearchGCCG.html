@@ -7,9 +7,9 @@
     <title>search GCCG String to index</title>
 </head>
 <script>
-    // let str = "CGCCGDKSKDGCCGCCGDKDGCCGDS";
+    let str = "CGCCGDKSKDGCCGCCGDKDGCCGDS";
     // let str = "GCGCCGGCCGCCGCCGCCGCCG";
-    let str = "GCGCCGCCGGCCG";
+    // let str = "GCGCCGCCGGCCG";
 
     console.log(str);
     let result = [];
@@ -28,20 +28,20 @@
 
 
     // 인덱스 증감자를 활용한 풀이
-    // for(let i=0; i<str.length; i++) {
-    //     if(str.charAt(i) + str.charAt(i+1) + str.charAt(i+2) + str.charAt(i+3) == "GCCG") {
-    //         result.push(i);
-    //         i+=3;
-    //     }
-    // }
-    // console.log(result);
-
+    let len = str.length;
+    for(let i=0; i<str.length; i++) {
+        if(str.charAt(i) + str.charAt(i+1) + str.charAt(i+2) + str.charAt(i+3) == "GCCG") {
+            result.push(i);
+            i+=3;
+        }
+    }
+    console.log(result);
 
     // length, charAt 활용한 풀이
-    for(let i=0; i<str.length; i++) {
-        console.log(i, str.charAt(i));
-        
-    }
+    // let len = str.length;
+    // for(let i=0; i<len; i++) {
+    //     console.log(i, str.charAt(i));
+    // }
 
 
 </script>

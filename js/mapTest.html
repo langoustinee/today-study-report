@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Map test</title>
+</head>
+<script>
+
+    // map은 키, 값을 [키, 값] 형태로 선언
+    let post = new Map([
+        ["title","제목1"], 
+        ["content", "내용1"]
+    ]);
+
+    // map의 키 값 모두 조회하고 싶을 때 entries() 사용하자.
+    // 키 값만 조회하고 싶을 때는 keys(), 값만은 values()
+    for(data of post.entries()) {
+        console.log(data[0], data[1]);
+    }
+
+
+</script>
+<body>
+    
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>String Object Test</title>
+</head>
+<script>
+    let cafe1 = "starbucks";
+    let cafe2 = "Twosome-Place";
+    console.log(cafe1.toUpperCase(), cafe2.toLowerCase());
+
+
+    let problem = "     HELLO WORLD!!!    ";
+
+    let res = "";
+    let len = problem.length; // 한번만 불러와 저장해둠.
+    
+    // for(let i=0; i<problem.length; i++) { // 이런식으로 하면 problem 길이만큼 불러와야 함.
+    for(let i=0; i<len; i++) {
+        if(problem.charAt(i) !== " ") {
+            res = res + problem.charAt(i);
+        }
+    }
+    console.log(res);
+
+    // indexOf() 탐색 메서드, 찾으면 인덱스값, 없으면 -1 반환
+    console.log(cafe1.indexOf("s"), cafe1.lastIndexOf("s"), cafe1.indexOf("x"));
+
+    // split() 기준을 통해 문자열 분할
+    let splitCafe2 = cafe2.split("-");
+    console.log(splitCafe2, splitCafe2[0], splitCafe2[splitCafe2.length-1]);
+
+    // substring(n)은 n 이후 전부 자름, substring(n,m)은 n부터 m까지 자 르거나, n부터 m개를 자를 수 있음.
+    console.log(cafe2.substring(5), cafe2.substring(0, 4));
+
+
+    // 13자리 문자열 만들어 뒤 6자리를 *로 만들기
+    let thirty = "AbCdEfGHiJkLm";
+    let thirtyLen = thirty.length;
+    for(let i=7; i<thirtyLen; i++) {
+        thirty = thirty.replace(thirty.charAt(i), "*");
+    }
+    console.log(thirty);
+
+
+    // Template Literal
+    // 백틱: 줄바꿈을 허용함.
+    let price = 5200;
+    let buying = `다해서 총 ${price}원 입니다. 손님.`;
+    console.log(buying);
+
+
+    // Date
+    // Date로 날짜 설정하려면 월을 -1로 설정해야한다.
+    let now = new Date();
+    let birthday = new Date(2022, 9, 5);
+    console.log(now, birthday);
+
+    // 10월 5일부터 지나온 날수
+    let interval = now.getTime() - birthday.getTime();
+    let dayCnt = interval / (1000 * 60 * 60 * 24);
+    console.log(Math.round(dayCnt));
+
+
+</script>
+<body>
+    
+</body>
+</html>
