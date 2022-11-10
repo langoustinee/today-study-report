@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>oop contructor test</title>
+</head>
+<script>
+    const User = class {
+
+        constructor(userId, name, point) {
+            this.userId = userId;
+            this.name = name;
+            this.point = point;
+        }
+
+        setUserName(name) {
+            this.name = name;
+        }
+
+        setUserPoint(point) {
+            this.point = point;
+        }
+
+        getUserInfo() {
+            return "userId:" + this.userId + ", name:"+ this.name + ", point:" + this.point;
+        }
+    }
+
+    const user1 = new User("moon123", "jooney", 0);
+    console.log(user1.getUserInfo());
+
+
+    let updateUserPoint = (id, point) => {
+        user1.setUserPoint(1);
+    }
+    
+    updateUserPoint(user1.getUserInfo.userId, 1);
+    console.log(user1.getUserInfo());
+
+
+    const AddrBook = class {
+        constructor(no=1, name="", phone="") {
+            this.no = no;
+            this.name = name;
+            this.phone = phone;
+        }
+
+        getAddressInfo() {
+            const data = { "no":this.no, "name":this.name, "phone":this.phone };
+            return data;
+        }
+
+        // get, set을 앞에 붙이는 것은 개발자들이 잘 사용하지 않음.
+        get getAddressName() {
+            return this.name;
+        }
+
+        static getAdress() {
+            return "static name";
+        }
+    }
+
+    const address1 = new AddrBook();
+    const address2 = new AddrBook(2, "adam", "010-2222-4444");
+
+    console.log(address1);
+    console.log(address1.no, address1.name, address1.phone);
+
+    console.log(address2);   
+
+    console.log(address1.getAddressInfo());
+    console.log(address2.getAddressInfo());
+
+
+    // 실무에서는 잘 사용하지 않음.
+    let address1_name = address1.getAddressName;
+    let address2_name = address2.getAddressName;
+    console.log(address1_name, address2_name);
+
+
+    // class의 static 메서드 getAdress() 접근
+    console.log(AddrBook.getAdress());
+    // 인스턴스에서 class의 static 메서드로 접근 불가
+    // 이유는 클래스가 만들어지는 시점엔 인스턴스가 없기 때문이다.
+    console.log(address1.getAdress());
+
+
+</script>
+<body>
+    
+</body>
+</html>

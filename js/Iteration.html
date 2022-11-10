@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iteration Test</title>
+</head>
+<script>
+    let direction = {
+        "up":1,
+        "down":2,
+        "right":3,
+        "left":4
+    }
+
+    let iter = direction[Symbol.iterator];
+    console.log(iter);
+
+    let direction2 = ["up", "down", "right", "left"];
+    let iter2 = direction2[Symbol.iterator]();
+    console.log(iter2);
+
+    console.log(iter2.next());
+    console.log(iter2.next());
+    console.log(iter2.next());
+    console.log(iter2.next());
+
+
+    // for ~ in -> 데이터 속성을 순회, 배열의 경우 인덱스
+    for(attr in direction2) {
+        console.log(attr);
+    }
+
+    // for ~ of ~ -> 데이터를 순회
+    for(const data of direction2) {
+        console.log(data);
+    }
+
+</script>
+<body>
+    
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inheritance Test</title>
+</head>
+<script>
+    class DefaultPlayer {
+        constructor(name="이름없음") {
+            this.name = name;
+        }
+
+        playerStanding() {
+            console.log("플레이어 "+ this.name +" 님이 움직일 준비가 되었습니다.");
+        }
+    }
+    
+    class Move extends DefaultPlayer {
+        constructor(name="이름없음", direction="") {
+            super(name);
+            this.direction = direction;
+        }
+
+        // method Overriding
+        playerStanding() {
+            super.playerStanding();
+            console.log(this.name + " 사용자가 " + this.direction+" 방향으로 가다가 멈추었습니다.");
+        }
+    }
+
+    class HandsUp extends DefaultPlayer {
+        constructor(name="이름없음") {
+            super(name);
+        }
+    }
+
+    const player1 = new Move("jooney", "up");
+    const player2 = new HandsUp();
+
+    const player3 = new Move("hong", "down");
+
+    player1.playerStanding();
+    player2.playerStanding();
+
+    console.log(player1);
+    player1.playerStanding();
+
+    player3.playerStanding();
+
+</script>
+<body>
+    
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Destructuring Test</title>
+</head>
+<script>
+    // 배열은 순차적 대입
+    let data = [1,2,3,4,5];
+    let [one,two,three,four,five] = data;
+
+    console.log(one, two, three, four, five);
+
+
+    // 객체는 키값을 보고 대입
+    let data2 = {"title":"제목", "content":"내용", "des":"설명"};
+    let {title, content, des, description} = data2;
+    console.log(title, content, des, description);
+
+
+    // 구조 분해 할당을 통한 매개변수 그룹화
+    let repeatStar = dataSet => {
+        let {star, n} = dataSet;
+        for(let i=0; i<n; i++) {
+            console.log(star);
+        }
+    }
+    repeatStar({n:5, star:"*"});
+
+
+
+    let [first, ... etc] = data;
+    console.log(first, etc);
+
+    let {title1, content1, ... attr} = data2;
+    console.log(attr);
+
+</script>
+<body>
+    
+</body>
+</html>

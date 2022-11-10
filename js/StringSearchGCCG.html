@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>search GCCG String to index</title>
+</head>
+<script>
+    // let str = "CGCCGDKSKDGCCGCCGDKDGCCGDS";
+    // let str = "GCGCCGGCCGCCGCCGCCGCCG";
+    let str = "GCGCCGCCGGCCG";
+
+    console.log(str);
+    let result = [];
+    
+    // GCCG 문자열을 찾아서 첫글자의 위치를 출력해라.
+    // 앞에서 찾은 위치를 똑같이 출력하면 안된다.
+    // length, charAt 두가지만 사용
+
+    // replaceAll을 활용한 풀이
+    // str = str.replaceAll("GCCG", "*###");
+    // for(let i=0; i<str.length; i++) {
+    //     if(str.charAt(i) == "*") result.push(i);
+    // }
+    // console.log(str, result);
+
+
+
+    // 인덱스 증감자를 활용한 풀이
+    // for(let i=0; i<str.length; i++) {
+    //     if(str.charAt(i) + str.charAt(i+1) + str.charAt(i+2) + str.charAt(i+3) == "GCCG") {
+    //         result.push(i);
+    //         i+=3;
+    //     }
+    // }
+    // console.log(result);
+
+
+    // length, charAt 활용한 풀이
+    for(let i=0; i<str.length; i++) {
+        console.log(i, str.charAt(i));
+        
+    }
+
+
+</script>
+<body>
+    
+</body>
+</html>

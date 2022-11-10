@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math class Test</title>
+</head>
+<script>
+    let num = Math.random(); // range(0.0~1.0)
+    console.log(num);
+
+    console.log(Math.round(num), Math.ceil(num), Math.floor(num)); // 반올림 올림 내림
+
+    let bigNum = Math.round((num * 1000) % 5);
+    console.log(bigNum);
+
+    const list = ["코트", "패딩", "후리스", "개파카", "코듀로이자켓"];
+    console.log(list[bigNum]);
+
+
+</script>
+<body>
+    
+</body>
+</html>

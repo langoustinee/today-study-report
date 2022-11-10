@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exception Handling test</title>
+</head>
+<script>
+    try {
+        let arr = new Array(4300000000);
+    } catch (Exception) {
+        console.log("예외 이름: " + Exception.name);
+        console.log("예외 내용: "+ Exception.message);
+    } finally {
+        console.log("출력합니다.");
+    }  
+
+
+    let getCoffee = (coin) => {
+        if(coin < 500) throw new Error("500원 이상의 동전을 넣어주세요.");
+        return coin + "원 동전을 받았습니다.";
+    }
+    getCoffee(1000);
+    getCoffee(400);
+
+    
+</script>
+<body>
+    
+</body>
+</html>
