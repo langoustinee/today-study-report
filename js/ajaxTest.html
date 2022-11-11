@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ajax Test</title>
+</head>
+<script>
+    window.addEventListener("load", (e) => {
+        let clothingCSV = document.getElementById("connect");
+        let content = document.getElementById("clothing-box");
+
+        let getBookInfoJSON = document.getElementById("getBookInfo");
+        let bookNo = document.getElementById("bookNo");
+        let bookTitle = document.getElementById("bookTitle");
+        let bookCont = document.getElementById("bookCont");
+        let bookAuthor = document.getElementById("bookAuthor");
+
+        let getClothInfo = document.getElementById("getClothInfo");
+        let clothContent = document.getElementById("cloth-contents");
+
+        clothingCSV.addEventListener("click", () => {
+            // ajax 요청 객체 생성
+            let request = new XMLHttpRequest();
+            
+            // 연결 준비 open(요청방식, url)
+            request.open("GET", "./data1.csv");
+            
+            // 데이터 요청 - 데이터와 함께 전송해야하지만 지금은 존재하지 않음.
+            request.send();
+
+            // 요청에 대한 결과를 받기 위해 콜백함수 작성
+            // 정상적인 응답이 온 경우
+            request.addEventListener("load", () => {
+                // XML 이외의 경우를 읽는 경우
+                console.log(request.responseText);
+                let clothList = request.responseText.split(",");
+                for(cloth of clothList) {
+                    content.innerHTML += cloth + `<br>`;
+                }
+
+            });
+
+            // 에러가 발생하여 데이터 응답을 못 받았을 경우
+            request.addEventListener("error", () => {
+                console.log(request.status);
+            });
+        });
+
+        getBookInfoJSON.addEventListener("click", () => {
+            let request = new XMLHttpRequest();
+            request.open("GET", "./data2.json");
+            request.send();
+            request.addEventListener("load", () => {
+                // JSON parsing
+                let result = JSON.parse(request.responseText);
+                console.log(result);
+                bookNo.value = result.no;
+                bookTitle.value = result.title;
+                bookCont.value = result.content;
+                bookAuthor.value = result.author;
+            })
+            request.addEventListener("error", () => {
+                console.log("정상적으로 데이터를 가져오지 못했습니다. 에러내용: " + request.status);
+            })
+        });
+
+        getClothInfo.addEventListener("click", () => {
+            let request = new XMLHttpRequest();
+            request.open("GET", "./data3.json");
+            request.send();
+            request.addEventListener("load", () => {
+                let result = JSON.parse(request.responseText);
+                console.log(result);
+
+                for(let i=0; i<result.cnt; i++) {
+                    let row = result.cloths[i];
+                    console.log(row);
+                    let tbody = `<td>${row.category}</td>
+                                <td>${row.goodsName}</td>`;
+                    document.getElementById("cloth-contents").innerHTML += tbody;
+                }
+
+            });
+            request.addEventListener("error", () => {
+
+            })
+        });
+
+
+    });
+</script>
+<body>
+
+    <button id="connect">가져오기</button>
+    <div id="clothing-box">의류 출력</div>
+
+    <br>
+
+    <button id="getBookInfo">책 정보 가져오기</button>
+    <br>
+    <div id="bookInfo">
+        <fieldset>
+            <legend>책 정보</legend>
+            <p>
+                책 번호 <input id="bookNo" readonly />
+            </p>
+            <p>
+                책 제목 <input id="bookTitle" readonly />
+            </p>
+            <p>
+                감상문 <textarea id="bookCont"></textarea>
+            </p>
+            <p>
+                작성자 <input id="bookAuthor" readonly />
+            </p>
+        </fieldset>
+    </div>
+
+
+    <br>
+
+    <button id="getClothInfo">의류 정보 가져오기</button>
+    <br>
+    <table id="cloth-table" style="border: 1px solid black;">
+        <thead>
+            <th>분류</th>
+            <th>제품명</th>
+        </thead>
+        <tbody id="cloth-contents">
+        </tbody>
+    </table>
+
+
+</body>
+</html>

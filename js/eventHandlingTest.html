@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Handling Test</title>
+</head>
+<body>
+    <!-- 
+        from 내부에 있는 button 태그는 Submit 기능을 한다. 
+        태그 내부에 onlick 이벤트로 스크립트 코드를 inline으로 처리할 수 있지만 이는 옛날 방식이다.
+    -->
+    <button id="btn1">버튼1</button>
+    <input type="button" value="버튼2" id="btn2">
+
+    <p id="pTag">저는 문단입니다.</p>
+
+</body>
+<script>
+
+    let btn1 = document.getElementById("btn1");
+    let btn2 = document.getElementById("btn2");
+
+    btn1.onclick = function() {
+        console.log("옛날 방식의 이벤트 처리");
+    };
+
+    btn2.addEventListener("click", () => {
+        console.log("요즘 쓰는 클릭 이벤트 처리");
+    });
+
+    let pTag = document.getElementById("pTag");
+    pTag.addEventListener("click", (e) => {
+        for(idx in e) {
+            console.log(idx, e[idx]);
+        }
+    });
+
+    
+    btn1.addEventListener("click", () => {
+        // d이벤트 트리거를 사용해 버튼 클릭시 p 클릭 이벤트 강제 발생
+        pTag.click();
+    });
+
+    btn2.addEventListener("click", () => {
+        btn1.innerHTML = "버튼3";
+    });
+
+    
+
+
+</script>
+</html>

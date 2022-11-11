@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sync and Async Test</title>
+</head>
+<script>
+    // 스크립트 코드는 body보다 후위에 있거나 이벤트 발생 후 동작하도록 해야 한다.
+
+
+    let job = () => {
+        setTimeout(() => {
+            const stt = Date.now();
+            for(let i=0; i<1000000000; i++) {}
+            const edt = Date.now();
+            console.log((edt-stt) + " 밀리초");
+        }, 0);
+    }
+
+    window.addEventListener("load", () => {
+
+        
+        document.getElementById("btn1").addEventListener("click", () => {
+            // 반복문을 10억번 돌렸을 떄 걸리는 시간 측정
+
+            // 동기 방식: 작업 순서대로 처리되어 출력됨.
+            // const stt = Date.now();
+            // for(let i=0; i<1000000000; i++) {}
+            // const edt = Date.now();
+            // console.log((edt-stt) + " 밀리초");
+
+            // 비동기식 처리: 타이머는 비동기식으로 처리를 수행함.
+            job();
+
+            console.log("next job");
+        });
+
+
+    });
+
+</script>
+<body>
+    <button id="btn1">확인</button>
+    
+</body>
+</html>

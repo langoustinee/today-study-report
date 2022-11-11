@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Handling Test</title>
+</head>
+<body>
+    <form action="loginRequest" method="post" id="loginForm">
+        <fieldset>
+            <p>
+                사용자 아이디 <input type="text" name="userId" id="userId" />
+                <p id="userIdMsg"></p>
+            </p>
+            <p>
+                비밀번호 <input type="password" name="userPwd" id="userPwd" /><span id="pwdStrong"></span>
+                <p id="userPwdMsg"></p>
+            </p>
+            <p>
+                비밀번호 확인 <input type="password" name="userPwdCheck" id="userPwdCheck" />
+            </p>
+            <input type="submit" value="로그인" />
+        </fieldset>
+    </form>
+
+</body>
+<script>
+    let loginForm = document.getElementById("loginForm");
+    let loginUserId = document.getElementById("userId");
+    let loginUserPwd = document.getElementById("userPwd");
+    let loginUserPwdCheck = document.getElementById("userPwdCheck");
+
+    let idMsg = document.getElementById("userIdMsg");
+    let pwdMsg = document.getElementById("userPwdMsg");
+    let pwdStrong = document.getElementById("pwdStrong");
+
+    // 최소 8 자, 하나 이상의 문자, 하나의 숫자 및 하나의 특수 문자 정규식
+    // var reg = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+    // let reg = /"^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$"/;
+
+    // 특수문자 / 문자 / 숫자 포함 형태의 8~15자리 이내의 암호 정규식 ( 3 가지 조합)
+    // let reg = /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/;
+
+    // strongRegex: 안전성이 높은 비밀번호 길이가 14 자 이상이고 기호, 대문자, 텍스트의 조합이있는 경우
+    // mediumRegex: 안전한 비밀번호 길이가 10 자 이상이고 기호, 대문자, 텍스트가 조합 된 경우
+    // enoughRegex: 안정성이 약한 비밀번호 길이가 10 자 미만이고 기호, 대문자, 텍스트의 조합을 포함하지 않는 경우
+    let strongRegex = new RegExp("^(?=.{14,})(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*$", "g");
+    let mediumRegex = new RegExp("^(?=.{10,})(((?=.*[A-Z])(?=.*[a-z]))|((?=.*[A-Z])(?=.*[0-9]))|((?=.*[a-z])(?=.*[0-9]))).*$", "g");
+    let enoughRegex = new RegExp("(?=.{8,}).*", "g");
+
+
+    let nofityMsg = (target, msg, event) => {
+        target.innerHTML = msg;
+        target.style.color = "Red";
+        target.style.fontSize = "5pt";
+        event.preventDefault();
+        return;
+    }
+
+    let idVaildation = (id, e) => {
+        if(id.value.trim().length === 0) {
+            nofityMsg(idMsg, "아이디는 필수적으로 입력해야 합니다. 아이디를 입력해주세요.", e);
+        }else {
+            idMsg.innerHTML = "";
+        }
+    }
+
+    let pwdVaildation = (pwd, checkPwd, e) => {
+        if(pwd.value.trim().length === 0) nofityMsg(pwdMsg, "비밀번호는 필수적으로 입력해야 합니다. 비밀번호를 입력해주세요.", e);
+        else if(checkPwd.value.trim().length === 0) nofityMsg(pwdMsg, "비밀번호를 다시 한번 입력해야 합니다.", e);
+        else if(pwd.value.trim() !== checkPwd.value.trim()) nofityMsg(pwdMsg, "비밀번호가 다르게 입력되었습니다. 다시 입력해주세요.", e);
+        else if(!strongRegex.test(loginUserPwd)) nofityMsg(pwdMsg, "입력한 비밀번호가 유효하지 않습니다.", e);
+
+    }
+
+
+    loginUserPwd.addEventListener("change", () => {
+        if(strongRegex.test(loginUserPwd.value.trim())) {
+            pwdStrong.innerHTML = " 안전성이 높은 비밀번호 입니다.";
+            pwdStrong.style.color = "green";
+            pwdStrong.style.fontSize = "3pt";
+        }
+        else if(mediumRegex.test(loginUserPwd.value.trim())) {
+            pwdStrong.innerHTML = " 안전한 비밀번호 입니다.";
+            pwdStrong.style.color = "gray";
+            pwdStrong.style.fontSize = "3pt";
+        }
+        else if(enoughRegex.test(loginUserPwd.value.trim())) {
+            pwdStrong.innerHTML = " 안전성이 약한 비밀번호 입니다.";
+            pwdStrong.style.color = "orange";
+            pwdStrong.style.fontSize = "3pt";
+        }
+        else {
+            pwdStrong.innerHTML = " 안전성이 매우 약한 비밀번호 입니다.";
+            pwdStrong.style.color = "Red";
+            pwdStrong.style.fontSize = "3pt";
+        }    
+    })
+
+    loginForm.addEventListener("submit", (e) => {
+        idVaildation(loginUserId, e);
+        pwdVaildation(loginUserPwd, loginUserPwdCheck, e);
+    })
+
+
+</script>
+</html>

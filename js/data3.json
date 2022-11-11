@@ -1,0 +1,8 @@
+{
+    "cnt":3,
+    "cloths":[
+        { "category":"top", "goodsName":"골지 니트" },
+        { "category":"outer", "goodsName":"코듀로이 자켓" },
+        { "category":"bottom", "goodsName":"와이드 진" }
+    ]
+}

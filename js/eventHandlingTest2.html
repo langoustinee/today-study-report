@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Handling Test 2</title>
+</head>
+<script>
+    // header-first를 모름에도 불구하고 load후에 이벤트가 불러지기에 가능하다.
+    window.addEventListener("load", () => {
+        document.getElementById("header-first").innerHTML += "World!";
+
+        // 무한 스크롤
+        for (let i = 0; i < 20; i++) {
+            document.getElementById("body").innerHTML += `<h2>Scrolling ...</h2>`;
+        }
+    });
+
+    window.addEventListener("scroll", () => {
+        // 스크롤 하는 위치가 문서의 높이와 갈을 때는 가장 아래에서 스크롤을 할 때이다.
+        let supportPageOffset = window.pageXOffset !== undefined;
+        let isCSS1Compat = ((document.compatMode || "") === "CSS1Compat");
+        let scrollTop = supportPageOffset ? window.pageYOffset : isCSS1Compat ? document.documentElement.scrollTop : document.body.scrollTop;
+        let scrollHeight = scrollTop + window.innerHeight;
+        let documentHeight = document.body.clientHeight;
+
+        // 스크롤의 높이와 문서의 높이가 같을 때
+        if (scrollHeight >= documentHeight) {
+            for (var i = 0; i < 10; i++) {
+                document.getElementById('body').innerHTML += '<h2>Scrolling ...</h2>';
+            }
+        }
+    });
+
+</script>
+
+<body>
+    <h1 id="header-first">Hello </h1>
+    <div id="body"></div>
+</body>
+
+</html>
