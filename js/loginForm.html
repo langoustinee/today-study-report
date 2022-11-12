@@ -98,6 +98,12 @@
         }    
     })
 
+    pwdView.addEventListener("click", () => {
+        loginUserPwd.setAttribute("class", "view");
+        loginUserPwd.setAttribute("type", "text");
+    });
+    
+    
     loginForm.addEventListener("submit", (e) => {
         idVaildation(loginUserId, e);
         pwdVaildation(loginUserPwd, loginUserPwdCheck, e);
