@@ -35,6 +35,8 @@
     let pwdMsg = document.getElementById("userPwdMsg");
     let pwdStrong = document.getElementById("pwdStrong");
 
+    let pwdView = document.getElementById("pwdView");
+    
     // 최소 8 자, 하나 이상의 문자, 하나의 숫자 및 하나의 특수 문자 정규식
     // var reg = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
     // let reg = /"^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$"/;
@@ -99,8 +101,8 @@
     })
 
     pwdView.addEventListener("click", () => {
-        loginUserPwd.setAttribute("class", "view");
-        loginUserPwd.setAttribute("type", "text");
+        if(loginUserPwd.type === "password") loginUserPwd.type = "text";
+        else loginUserPwd.type = "password";
     });
     
     
