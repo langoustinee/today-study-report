@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Root>
+    <device>
+        <type>smart-phone</type>
+        <productNumber>iphone 11</productNumber>
+        <release>2019-9-10</release>
+    </device>
+    <!-- <device>
+        <type>smart-phone</type>
+        <productNumber>iphone 12</productNumber>
+        <release>2020-10-23</release>
+    </device>
+    <device>
+        <type>smart-phone</type>
+        <productNumber>iphone 13</productNumber>
+        <release>2021-9-24</release>
+    </device> -->
+</Root>

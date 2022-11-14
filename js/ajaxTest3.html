@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajax Test(xml) 3</title>
+</head>
+<script>
+    window.addEventListener("load", () => {
+        let getIphones = document.getElementById("getIphones");
+        let printIphones = document.getElementById("iphoneForm");
+
+        getIphones.addEventListener("click", () => {
+            let request = new XMLHttpRequest();
+            request.open("GET", "/resources/smartPhone.xml");
+            request.send();
+            request.addEventListener("load", () => {
+                let result = request.responseXML;
+                let deviceType = result.getElementsByTagName("type");
+                let deviceName = result.getElementsByTagName("productNumber");
+                let deviceRelease = result.getElementsByTagName("release");
+            
+                for(let i=0; i<deviceType.length; i++) {
+                    printIphones.type.value = deviceType[i].childNodes[0].nodeValue;
+                    printIphones.device.value = deviceName[i].childNodes[0].nodeValue;
+                    printIphones.release.date = deviceRelease[i].childNodes[0].nodeValue;
+                }
+
+            });
+
+        });
+
+    });
+
+</script>
+<body>
+    <button id="getIphones">아이폰 정보 가져오기</button>
+    <br>
+    <form id="iphoneForm">
+        타입 <input type="text" name="iphoneType" id="type" />
+        기기종류 <input type="text" name="iphoneDevice" id="device" />
+        출시일 <input type="date" name="iphoneRelease" id="release" />
+    </form>
+</body>
+</html>

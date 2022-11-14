@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>trend Form Test</title>
+</head>
+<body>
+    <input type="text" id="userId" />
+    <input type="number" id="userName" />
+    <input type="date" id="date" />
+
+    <br>
+
+    <progress id="progress" max="100"></progress>
+    <input type="button" id="start" />
+
+    <br>
+
+    <input type="tel" id="telList" />
+    <datalist id="telList">
+        <option value="010-1111-2222"></option>
+        <option value="010-3333-4444"></option>
+    </datalist>
+</body>
+<script>
+    let progress = document.getElementById("progress");
+    let btn = document.getElementById("start");
+
+    btn.addEventListener("click", () => {
+        let timer = setInterval(() => {
+            progress.value += 5;
+            console.log(progress.value);
+
+            // memoey leak(메모리 릭)을 해결하기 위해 value가 100이 되면 타이머 종료.
+            if(progress.value === 100) clearInterval(timer); 
+        },1000);
+    });
+
+</script>
+</html>

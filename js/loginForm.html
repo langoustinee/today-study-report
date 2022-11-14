@@ -14,7 +14,7 @@
                 <p id="userIdMsg"></p>
             </p>
             <p>
-                비밀번호 <input type="password" name="userPwd" id="userPwd" /><span id="pwdStrong"></span>
+                비밀번호 <input type="password" name="userPwd" id="userPwd" /><span id="pwdView"> 🔍</span> <span id="pwdStrong"></span>
                 <p id="userPwdMsg"></p>
             </p>
             <p>
@@ -98,7 +98,7 @@
             pwdStrong.style.color = "Red";
             pwdStrong.style.fontSize = "3pt";
         }    
-    })
+    });
 
     pwdView.addEventListener("click", () => {
         if(loginUserPwd.type === "password") loginUserPwd.type = "text";

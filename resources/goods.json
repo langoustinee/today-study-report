@@ -1,0 +1,9 @@
+{
+    "count":4,
+    "goods": [
+        { "category":"acc", "productName":"fantastic-slogun", "price":15000 },
+        { "category":"top", "productName":"coduroy_jarket", "price":149000 },
+        { "category":"bottom", "productName":"wide_jean", "price":89000 },
+        { "category":"acc", "productName":"2023-diary", "price":22000 }
+    ]
+}

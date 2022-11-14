@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajax Test 2</title>
+</head>
+<script>
+    window.addEventListener("load", () => {
+        let startGetGoods = document.getElementById("getGoods");
+        let printGoodsArea = document.getElementById("displayGoods");
+
+        startGetGoods.addEventListener("click", () => {
+
+            let request = new XMLHttpRequest();
+            request.open("GET", "/resources/goods.json");
+            request.send();
+            request.addEventListener("load", () => {
+                let result = JSON.parse(request.responseText);
+                let goods = result.goods;
+
+                // for(product of goods) {
+                //     console.log(product);
+                //     let tbody = `
+                //         <td>${product.category}</td>
+                //         <td>${product.productName}</td>
+                //         <td>${product.price}</td>`;
+                //     printGoodsArea.innerHTML += tbody;
+                // }
+
+                // 위의 for-of문보다는 forEach문을 활용하는게 요즘 트렌드이다.
+                goods.forEach((product) => {
+                    console.log(product);
+                    let tbody = `
+                        <td>${product.category}</td>
+                        <td>${product.productName}</td>
+                        <td>${product.price}</td>`;
+                    printGoodsArea.innerHTML += tbody;
+                });
+
+            });
+            request.addEventListener("error", () => {
+                console.log(request.status);
+            });
+        });
+
+
+    });
+
+</script>
+<body>
+    <button id="getGoods">가져오기</button>
+    <br>
+    <table>
+        <thead>
+            <th>분류</th>
+            <th>제품명</th>
+            <th>가격</th>
+        </thead>
+        <tbody id="displayGoods">
+        </tbody>
+    </table>
+</body>
+</html>
