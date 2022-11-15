@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File API Test</title>
+</head>
+<body>
+    <!-- 이미지 파일만 선택할 수 있는 input file 객체 -->
+    <input type="file" id="imgFile" accept=".png,.jpg,.jpeg,.gif" />
+    <br>
+    <img id="imgView" width="300" height="300" />
+</body>
+<script>
+    let imgInput = document.getElementById("imgFile");
+    let imgView = document.getElementById("imgView");
+
+    // img input의 선택이 변경되면, 즉 파일이 업로드될 경우이다.
+    imgInput.addEventListener("change", () => {
+
+        // 선택한 파일의 내용 읽어오기 - 비동기 방식으로 동작.
+        let reader = new FileReader();
+
+        // 자바스크립트는 0이 아닌 숫자, null, undefined가 아니면 true로 간주한다.(truthy)
+        if(!imgInput.files[0]) {
+            console.log("선택된 파일이 없습니다.");
+            return;
+        }
+
+        reader.readAsDataURL(imgInput.files[0]);
+
+        reader.addEventListener("load", () => {
+            console.log(reader.result);
+            imgView.src = reader.result;
+        });
+        
+        reader.addEventListener("error", (e) => {
+            console.log(e);
+        })
+        
+    });
+
+</script>
+</html>

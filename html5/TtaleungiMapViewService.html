@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ttaleung Map View Service</title>
+</head>
+<script>
+    window.addEventListener("load", (e) => {
+        
+        let request = new XMLHttpRequest();
+        let url = "http://openapi.seoul.go.kr:8088/4c4f56417a786d7537394463615474/json/bikeList/1/1000";
+        request.open("GET", url);
+        request.send();
+        request.addEventListener("load", () => {
+            let result = JSON.parse(request.responseText);
+            console.log(result);
+        });
+        request.addEventListener("error", () => {
+            console.log(request.status);    
+        });
+
+    });
+</script>
+<body>
+    
+</body>
+<script>
+
+</script>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Storage(Session Storage) Test</title>
+</head>
+<body>
+    <fieldset>
+        <legend>session storage</legend>
+        <input type="text" id="inputKey" name="inputKey" placeholder="키를 입력하세요." />
+        <input type="text" id="inputVal" name="inputVal" placeholder="값을 입력하세요." />
+        
+        <input type="button" id="addSession" value="추가" />
+        <input type="button" id="delSession" value="삭제" />
+        <button id="newWindow">새 창</button>
+
+        <fieldset>
+            <legend>session storage data list</legend>
+            <select id="datalist" size="10">
+
+            </select>
+            <input type="button" value="재출력" id="rePrint" />
+        </fieldset>
+
+    </fieldset>
+    <br>
+    
+</body>
+<script>
+    // session storage: 
+    // 1. 브라우저 종료시 내용이 소멸되는지
+    // 2. 현재창에서 새창 만들었을 때 내용이 복제가 되는지
+
+    // local storage:
+    // 1. id 저장을 구현하는데 브라우저 종료후 다시 실행했을 때 내용이 유지되는지
+
+    let inputKey = document.getElementById("inputKey");
+    let inputVal = document.getElementById("inputVal");
+
+    let addSession = document.getElementById("addSession");
+    let delSession = document.getElementById("delSession");
+    let newWindow = document.getElementById("newWindow");
+
+    let sessionDataList = document.getElementById("datalist");
+
+    // 세션 스토리지 목록을 읽어와서 출력하기
+    // 최초 접속시, 삽입, 삭제시 매번 데이터를 다시 출력해야한다.(코드 중복을 줄이기 위해서)
+    const showSessionList = () => {
+        // 기존 목록 내용을 초기화
+        sessionDataList.innerHTML = "";
+    
+        // 세션 스토리지 목록을 순회하며 하나씩 읽어오기
+        for(let i=0; i<sessionStorage.length; i++) {
+            let ses = sessionStorage.key(i);
+            // select 옵션을 추가
+            sessionDataList.options[sessionDataList.options.length] = new Option(ses + " : " + sessionStorage[ses], ses);
+            console.log(sessionDataList);
+        }
+    };
+
+    const addSessionStorage = () => {
+        // 동일한 이름의 키를 여러 번 등록해도 중복 허용이 되지 않기에 value값만 변경되므로 결국 데이터 수정이 된다.
+        sessionStorage[inputKey.value] = inputVal.value;
+        showSessionList();
+    };
+
+    const delSessionStorage = () => {
+        delete sessionStorage[inputKey.value];
+        showSessionList();
+    };
+
+    const onClickShowInput = () => {
+        let select = sessionDataList.options[sessionDataList.selectedIndex];
+        inputKey.value = select.value;
+        inputVal.value = sessionStorage[select.value];
+    };
+
+
+    addSession.addEventListener("click", () => {
+        addSessionStorage();
+    });
+
+    delSession.addEventListener("click", () => {
+        delSessionStorage();
+    });
+
+    sessionDataList.addEventListener("click", () => {
+        onClickShowInput();
+    });
+
+    newWindow.addEventListener("click", () => {
+        // 새창으로 열면 세션은 현재 세션스토리지 내용을 가지고 복제됨.
+        window.open(location.href);
+    });
+
+
+    window.addEventListener("load", () => {
+        showSessionList();
+    });
+
+
+
+
+
+
+</script>
+</html>

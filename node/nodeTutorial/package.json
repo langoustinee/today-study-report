@@ -1,0 +1,14 @@
+{
+  "name": "tutorial",
+  "version": "0.0.1",
+  "description": "node tutorial start",
+  "main": "index.js",
+  "scripts": {
+    "test": "tutorial test"
+  },
+  "keywords": [
+    "tutorial"
+  ],
+  "author": "lango",
+  "license": "ISC"
+}

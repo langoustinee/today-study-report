@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Storage(Local Storage) Test</title>
+</head>
+<body>
+    <form method="POST" action="loginForm" id="loginForm">
+        <fieldset>
+            <legend>계정 정보 입력</legend>
+            <p>
+                아이디 <input type="text" id="userId" />
+            </p>
+            <p>
+                비밀번호 <input type="password" id="userPwd" />
+            </p>
+            <p>
+                <input type="checkbox" id="saveUserId" />아이디 저장
+            </p>
+            <p>
+                <input type="submit" value="로그인" />
+            </p>
+        </fieldset>
+    </form>
+</body>
+<script>
+
+    // 로컬 스토리지는 보안이 중요하지 않은 많은 양의 데이터를 저장하는데 용이하다.
+    // 비밀번호같은 예민한 정보는 로컬스토리지에 저장하면 안된다.
+    // 보통 장바구니, 아이디 저장 등에 사용할 수 있다.
+
+
+    let loginForm = document.getElementById("loginForm");
+    let userId = document.getElementById("userId");
+    let userPwd = document.getElementById("userPwd");
+    let saveUserId = document.getElementById("saveUserId");
+
+    
+    // submit: form의 데이터가 전송될 때
+    loginForm.addEventListener("submit", () => {
+        if(saveUserId.checked === true) localStorage.userId = userId.value; // 아이디 저장할 경우 로컬 스토리지에 저장
+        else delete localStorage.userId; // 아이디 저장이 해제될 경우 로컬 스토리지에서 삭제
+    });
+
+    window.addEventListener("load", () => {
+        // 메모리 로드가 끝나고 로컬 스토리지에 저장된 아이디 정보를 input으로 가져온다.
+        if(typeof localStorage.userId != "undefined") {
+            userId.value = localStorage.userId;
+            saveUserId.checked = true;
+        }
+    });
+
+
+</script>
+</html>

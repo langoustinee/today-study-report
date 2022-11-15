@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>web Worker Test 1</title>
+</head>
+<body>
+    <h1>Web Worker Test</h1>
+    숫자 입력 <input type="number" id="number" />
+    <button id="sumNumber">합계</button> 
+    <br>
+    <div id="printArea"></div>
+</body>
+<script>
+    let number = document.getElementById("number");
+    let sumNumber = document.getElementById("sumNumber");
+    let printArea = document.getElementById("printArea");
+    
+
+    // 큰 수의 합계를 구하려고 하면 구할 때까지 화면에서 다른 작업을 할 수 없다.
+    // sumNumber.addEventListener("click", () => {
+    //     let res = 0;
+    //     for(let i=0; i<=number.value; i++) {
+    //         res += i;
+    //     }
+    //     printArea.innerHTML = res;
+    // });
+
+    // worker를 통해 누적 합 작업을 시키면 클라이언트는 다른 작업을 할 수 있다.
+    let worker;
+    sumNumber.addEventListener("click", () => {
+        // 워커가 생성되어 있다면 중지시킨다.
+        if(worker) worker.terminate();
+        
+        // 워커 생성
+        worker = new Worker("/resources/worker1.js");
+        
+        // 워커에게 메시지(작업) 전송
+        worker.postMessage(number.value);    
+
+        // 워커에게서 받은 결과
+        worker.onmessage = (e) => {
+            printArea.innerHTML = `합은 ${e.data} 입니다.`;
+        };
+    });
+
+    
+
+
+</script>
+</html>
