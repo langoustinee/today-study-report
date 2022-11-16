@@ -11,18 +11,48 @@
 
 <body>
     <div id="map" style="width:500px; height:400px;"></div>
+    <br>
+    <fieldset>
+        <legend>내가 탈 따릉이 목록</legend>
+            <ul id="selectedCycleList"></ul>
+    </fieldset>
+    <br>
+    <fieldset>
+        <legend>내가 탈 따릉이</legend>
+        <p>
+            장소명 <input type="text" id="selectCycleStationName" readonly/> 
+        </p>
+        <p>
+            위도 <input type="text" id="selectCycleLat" readonly/>
+        </p>
+        <p>
+            경도 <input type="text" id="selectCycleLng" readonly/>
+        </p>
+        <p>
+            <button id="getSelectCycleInfo">등록하기</button>
+        </p>
+    </fieldset>
 </body>
 <script>
+    let selectedList = document.getElementById("selectedCycleList");
+    let selectName = document.getElementById("selectCycleStationName");
+    let selectLatInfo = document.getElementById("selectCycleLat");
+    let selectLngInfo = document.getElementById("selectCycleLng");
+    let saveCycleInfo = document.getElementById("getSelectCycleInfo");
 
-    /* 위치정보 객체 형식
-     *{ content: '<div>카카오</div>', latlng: new kakao.maps.LatLng(33.450705, 126.570677) }
+    /*  cycleInfo: 장소명, 위치정보, 거치대수를 담을 배열
+     *  위치정보 객체 형식
+     *  객체에 { content: 장소명, latlng: new kakao.maps.LatLng(위도, 경도) } 형식으로 저장해놓고 사용하자.
      */
+    let cycleInfo = [];
 
-    let cyclePositions = [];
-    let request = new XMLHttpRequest();
-
+    /*  getCycleInfo: 따릉이 공공 데이터 가져오는 함수
+     *  1. 대략 2-3000개를 1000개씩 나눠서 가져와야 하기 때문에 최하단 for문에서 3번 나눠 호출
+     *  2. 가져온 데이터를 cycleInfo 배열 내에 객체 {장소명, 위도값, 거치대수}로 저장
+     */
     let getCycleInfo = (start, end) => {
         let url = `http://openapi.seoul.go.kr:8088/4c4f56417a786d7537394463615474/json/bikeList/${start}/${end}`;
+        let request = new XMLHttpRequest();
         request.open("GET", url);
         request.send();
         request.addEventListener("load", () => {
@@ -30,12 +60,14 @@
             let row = result.rentBikeStatus.row;
             for (let i = 0; i < row.length; i++) {
                 let stationName = row[i].stationName.split(" ")[1];
-                let data = {
-                    content: `<div>${stationName}</div`,
-                    latlng: new kakao.maps.LatLng(row[i].stationLatitude, row[i].stationLongitude)
-                };
-                cyclePositions.push(data);
-                console.log("complete!!!");
+                if(stationName !== undefined) {
+                    let data = {
+                        content: stationName,
+                        latlng: new kakao.maps.LatLng(row[i].stationLatitude, row[i].stationLongitude),
+                        rackTotCnt: row[i].rackTotCnt
+                    };
+                    cycleInfo.push(data);
+                }
             }
         });
         request.addEventListener("error", () => {
@@ -43,38 +75,45 @@
         });
     };
 
+    /*  drawMap: 카카오맵 그리는 함수
+     *  1. 최초 지도 출력 위치는 현재 나의 위치 기준
+     *  2. 서울시 따릉이 위치를 지도 위 마커 표시
+     *  3. 마커 인포윈도우 정보: 마우스오버시 장소, 거치대개수 확인 가능
+     */ 
     let drawMap = () => {
         navigator.geolocation.getCurrentPosition((pos) => {
-
             let container = document.getElementById('map');
             let options = {
                 center: new kakao.maps.LatLng(pos.coords.latitude, pos.coords.longitude),
-                level: 3
+                level: 10
             };
-
             let map = new kakao.maps.Map(container, options);
             let mapTypeControl = new kakao.maps.MapTypeControl();
             map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
             let zoomControl = new kakao.maps.ZoomControl();
             map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
 
-            for (let i = 0; i < cyclePositions.length; i++) {
-                console.log("marker!!");
+            for (let i = 0; i < cycleInfo.length; i++) {
                 let marker = new kakao.maps.Marker({
                     map: map,
-                    position: cyclePositions[i].latlng
+                    position: cycleInfo[i].latlng,
+                    title: cycleInfo[i].content,
+                    rackTotCnt: cycleInfo[i].rackTotCnt
                 });
-
-                // 마커에 표시할 인포윈도우를 생성합니다 
+                marker.setMap(map);
+                let infowindowContent = `장소:${cycleInfo[i].content} <br>
+                                        거치대수:${cycleInfo[i].rackTotCnt}대
+                                        `;
                 let infowindow = new kakao.maps.InfoWindow({
-                    content: cyclePositions[i].content // 인포윈도우에 표시할 내용
+                    content: infowindowContent
                 });
-
-                // 마커에 mouseover 이벤트와 mouseout 이벤트를 등록합니다
-                // 이벤트 리스너로는 클로저를 만들어 등록합니다 
-                // for문에서 클로저를 만들어 주지 않으면 마지막 마커에만 이벤트가 등록됩니다
                 kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker, infowindow));
                 kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow));
+                kakao.maps.event.addListener(marker, 'click', (event) => {
+                    selectName.value = marker.getTitle();
+                    selectLatInfo.value = marker.getPosition().Ma;
+                    selectLngInfo.value = marker.getPosition().La;
+                });
             }
         }, (err) => {
             console.log(err.code, err.message);
@@ -83,34 +122,52 @@
         });
     }
 
-    // 인포윈도우를 표시하는 클로저를 만드는 함수입니다 
+    /*  makeOverListener, makeOutListener: 카카오맵 마커 인포윈도우 출력에 필요한 함수
+     *
+     */
     function makeOverListener(map, marker, infowindow) {
         return function () {
             infowindow.open(map, marker);
         };
     }
-
-    // 인포윈도우를 닫는 클로저를 만드는 함수입니다 
     function makeOutListener(infowindow) {
         return function () {
             infowindow.close();
         };
     }
 
+    /*   실제 데이터를 가져온 뒤 지도를 그리는 함수 실행하는 로직
+     *  3번에 걸쳐서 공공 데이터 정보를 가져옴(1번 호출당 1000개 제한 때문에)
+     *  데이터를 모두 가져온 후 지도를 그림
+     */
     for (let i = 1; i <= 3001; i += 1000) {
-        // 3번에 걸쳐서 공공 데이터 정보를 가져옴(1번 호출당 1000개 제한 때문에)
-        if(i < 3000) {
-            console.log(i, "따릉이 정보 가져와야해");
-            getCycleInfo(i, i + 999);
-            console.log(cyclePositions, cyclePositions.length);
-        }
-        else {
-            console.log(i, "카카오맵 그려야해");
-            drawMap();
-        }
+        if(i < 3000) getCycleInfo(i, i+999);
+        else drawMap();
     }
 
-    
+    /*  마커 클릭 이벤트
+     *  1. 마커를 클릭하면 내가 탈 따릉이 콘텐츠에 장소명, 위치정보를 출력한다.
+     *  2. 저장하면 Local Storage에 장소명과 위치정보가 기록된다.
+     */
+    saveCycleInfo.addEventListener("click", () => {
+        const stationName = selectName.value + "";
+        const stationPos = selectLatInfo.value + "," + selectLngInfo.value;
+        console.log(stationName, stationPos);
+        // localStorage.stationName = stationPos;
+        localStorage.setItem(stationName, stationPos);
+    });
+
+    /* 로드 이벤트
+     * 메모리 로드가 끝나고 로컬 스토리지에 저장된 아이디 정보를 selectedList 가져온다.
+     */
+    window.addEventListener("load", () => {
+        for(let i=0; i<localStorage.length; i++) {
+            const key = localStorage.key(i);
+            const value = localStorage.getItem(key);
+            let li = `<li>${key} (${value})</li>`;
+            selectedList.innerHTML += li;
+        }
+    });
 
 </script>
 
