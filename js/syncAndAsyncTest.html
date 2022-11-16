@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -13,15 +14,15 @@
     let job = () => {
         setTimeout(() => {
             const stt = Date.now();
-            for(let i=0; i<1000000000; i++) {}
+            for (let i = 0; i < 100000000000; i++) { }
             const edt = Date.now();
-            console.log((edt-stt) + " 밀리초");
+            console.log((edt - stt) + " 밀리초");
         }, 0);
     }
 
     window.addEventListener("load", () => {
 
-        
+
         document.getElementById("btn1").addEventListener("click", () => {
             // 반복문을 10억번 돌렸을 떄 걸리는 시간 측정
 
@@ -32,17 +33,33 @@
             // console.log((edt-stt) + " 밀리초");
 
             // 비동기식 처리: 타이머는 비동기식으로 처리를 수행함.
-            job();
+            // job();
 
-            console.log("next job");
+            let start = Date.now();
+
+            // worker를 통해 누적 합 작업을 시키면 클라이언트는 다른 작업을 할 수 있다.
+            let worker;
+            // 워커가 생성되어 있다면 중지시킨다.
+            if (worker) worker.terminate();
+            // 워커 생성
+            worker = new Worker("/resources/worker2.js");
+            // 워커에게 메시지(작업) 전송
+            worker.postMessage(start);
+            // 워커에게서 받은 결과
+            worker.onmessage = (e) => {
+                console.log(e);
+                printArea.innerHTML = `걸린 시간은 ${e.data} 밀리초 입니다.`;
+            };
         });
 
 
     });
 
 </script>
+
 <body>
     <button id="btn1">확인</button>
-    
+    <div id="printArea"></div>
 </body>
+
 </html>
