@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ttaleung Cycle Map View Service</title>
+</head>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=4af9bddf84ef85b7164805a4675701db"></script>
+
+<body>
+    <div id="map" style="width:500px; height:400px;"></div>
+</body>
+<script>
+
+    /* 위치정보 객체 형식
+     *{ content: '<div>카카오</div>', latlng: new kakao.maps.LatLng(33.450705, 126.570677) }
+     */
+
+    let cyclePositions = [];
+    let request = new XMLHttpRequest();
+
+    let getCycleInfo = (start, end) => {
+        let url = `http://openapi.seoul.go.kr:8088/4c4f56417a786d7537394463615474/json/bikeList/${start}/${end}`;
+        request.open("GET", url);
+        request.send();
+        request.addEventListener("load", () => {
+            let result = JSON.parse(request.responseText);
+            let row = result.rentBikeStatus.row;
+            for (let i = 0; i < row.length; i++) {
+                let stationName = row[i].stationName.split(" ")[1];
+                let data = {
+                    content: `<div>${stationName}</div`,
+                    latlng: new kakao.maps.LatLng(row[i].stationLatitude, row[i].stationLongitude)
+                };
+                cyclePositions.push(data);
+                console.log("complete!!!");
+            }
+        });
+        request.addEventListener("error", () => {
+            console.log(request.status);
+        });
+    };
+
+    let drawMap = () => {
+        navigator.geolocation.getCurrentPosition((pos) => {
+
+            let container = document.getElementById('map');
+            let options = {
+                center: new kakao.maps.LatLng(pos.coords.latitude, pos.coords.longitude),
+                level: 3
+            };
+
+            let map = new kakao.maps.Map(container, options);
+            let mapTypeControl = new kakao.maps.MapTypeControl();
+            map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
+            let zoomControl = new kakao.maps.ZoomControl();
+            map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+
+            for (let i = 0; i < cyclePositions.length; i++) {
+                console.log("marker!!");
+                let marker = new kakao.maps.Marker({
+                    map: map,
+                    position: cyclePositions[i].latlng
+                });
+
+                // 마커에 표시할 인포윈도우를 생성합니다 
+                let infowindow = new kakao.maps.InfoWindow({
+                    content: cyclePositions[i].content // 인포윈도우에 표시할 내용
+                });
+
+                // 마커에 mouseover 이벤트와 mouseout 이벤트를 등록합니다
+                // 이벤트 리스너로는 클로저를 만들어 등록합니다 
+                // for문에서 클로저를 만들어 주지 않으면 마지막 마커에만 이벤트가 등록됩니다
+                kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker, infowindow));
+                kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow));
+            }
+        }, (err) => {
+            console.log(err.code, err.message);
+        }, {
+
+        });
+    }
+
+    // 인포윈도우를 표시하는 클로저를 만드는 함수입니다 
+    function makeOverListener(map, marker, infowindow) {
+        return function () {
+            infowindow.open(map, marker);
+        };
+    }
+
+    // 인포윈도우를 닫는 클로저를 만드는 함수입니다 
+    function makeOutListener(infowindow) {
+        return function () {
+            infowindow.close();
+        };
+    }
+
+    for (let i = 1; i <= 3001; i += 1000) {
+        // 3번에 걸쳐서 공공 데이터 정보를 가져옴(1번 호출당 1000개 제한 때문에)
+        if(i < 3000) {
+            console.log(i, "따릉이 정보 가져와야해");
+            getCycleInfo(i, i + 999);
+            console.log(cyclePositions, cyclePositions.length);
+        }
+        else {
+            console.log(i, "카카오맵 그려야해");
+            drawMap();
+        }
+    }
+
+    
+
+</script>
+
+</html>
