@@ -58,7 +58,6 @@
         request.addEventListener("load", () => {
         let result = JSON.parse(request.responseText);
         let row = result.rentBikeStatus.row;
-        console.log(row.length);
         for (let i = 0; i < row.length; i++) {
             let stationName = row[i].stationName.split(" ")[1];
             if (stationName !== undefined) {
@@ -137,25 +136,11 @@
         };
     }
 
-    /*   실제 데이터를 가져온 뒤 지도를 그리는 함수 실행하는 로직
-     *  3번에 걸쳐서 공공 데이터 정보를 가져옴(1번 호출당 1000개 제한 때문에)
-     *  데이터를 모두 가져온 후 지도를 그림
-     */
-    const fetchData = async () => {
-        for (let i = 1; i <= 3001; i += 1000) {
-            await getCycleInfo(i, i + 999);
-        }
-    }
-
-    fetchData();
-    drawMap();
-
-
     /*  마커 클릭 이벤트
      *  1. 마커를 클릭하면 내가 탈 따릉이 콘텐츠에 장소명, 위치정보를 출력한다.
      *  2. 저장하면 Local Storage에 장소명과 위치정보가 기록된다.
      */
-    saveCycleInfo.addEventListener("click", () => {
+     saveCycleInfo.addEventListener("click", () => {
         const stationName = selectName.value + "";
         const stationPos = selectLatInfo.value + "," + selectLngInfo.value;
         console.log(stationName, stationPos);
@@ -174,6 +159,25 @@
             selectedList.innerHTML += li;
         }
     });
+
+    /*   실제 데이터를 가져온 뒤 지도를 그리는 함수 실행하는 로직
+     *  3번에 걸쳐서 공공 데이터 정보를 가져옴(1번 호출당 1000개 제한 때문에)
+     *  데이터를 모두 가져온 후 지도를 그림
+     */
+    const fetchData = () => {
+        for (let i=1; i<=2001; i+=1000) {
+            getCycleInfo(i, i+999);
+        }
+    }
+
+    const init = async () => {
+        console.log(cycleInfo, cycleInfo.length);
+        await fetchData();
+        console.log(cycleInfo, cycleInfo.length);
+        await drawMap();
+    }
+    init();
+
 
 </script>
 
