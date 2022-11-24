@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Node & MariaDB Connection Test</title>
+    <link rel="stylesheet" href="/css/common.css" />
+</head>
+<body>
+    <h1 id="header">Hello Node!</h1>
+    <p id="para1">Hello mariaDB!</p>
+    <button id="getItemBtn">데이터 가져오기</button>
+    <hr>
+    <fieldset>
+        <legend>데이터 목록</legend>
+        <table id="itemTable">
+            <thead>
+                <th>itemid</th>
+                <th>itemname</th>
+                <th>price</th>
+                <th>description</th>
+                <th>img</th>
+                <th>updatedate</th>
+            </thead>
+            <tbody id="getItemInfo">
+            </tbody>
+        </table>
+    </fieldset>
+</body>
+<script>
+    let btn = document.getElementById("getItemBtn");
+    let dataList =  document.getElementById("getItemInfo");
+
+    btn.addEventListener("click", () => {
+        let request = new XMLHttpRequest();
+
+        // 외부에서 요청할 때는 ip 및 포트번호를 기재해야 하고, 내부에서는 생략 가능하다.
+        request.open("GET", "/item/all");
+        request.send('');
+        request.addEventListener("load", () => {
+            let data = JSON.parse(request.responseText);
+            
+            if(data.result) {
+                let rows = data.allList;
+                for(let item of rows) {
+                    let tbody = `<td>${item.itemid}</td>`;
+                    tbody += `<td>${item.itemname}</td>`;
+                    tbody += `<td>${item.price}</td>`;
+                    tbody += `<td>${item.description}</td>`;
+                    tbody += `<td><img src="/img/img/${item.pictureurl}" width="200" height="200" /></td>`;
+                    tbody += `<td>${item.updatedate}</td>`;
+                    dataList.innerHTML += tbody;
+                }
+            }
+            else dataList.innerHTML = `<p>데이터 가져오기 실패</p>`;
+            
+        }); 
+        request.addEventListener("error", () => {
+            console.log(error);
+        });
+    });
+
+</script>
+</html>
