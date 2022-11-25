@@ -10,37 +10,30 @@
 <body>
     <h1 id="header">Hello Node!</h1>
     <p id="para1">Hello mariaDB!</p>
-    <button id="getItemBtn">데이터 가져오기</button>
+    <button id="getAllData">전체 가져오기</button>
+    <button id="getPageData">페이지 가져오기</button>
+    <button id="addFormData">상품 추가</button>
     <hr>
     <fieldset>
-        <legend>데이터 목록</legend>
-        <table id="itemTable">
-            <thead>
-                <th>itemid</th>
-                <th>itemname</th>
-                <th>price</th>
-                <th>description</th>
-                <th>img</th>
-                <th>updatedate</th>
-            </thead>
-            <tbody id="getItemInfo">
-            </tbody>
-        </table>
+        <legend>과일상품</legend>
+        <div id="contents"></div>
     </fieldset>
 </body>
 <script>
-    let btn = document.getElementById("getItemBtn");
+    let btn1 = document.getElementById("getAllData");
+    let btn2 = document.getElementById("getPageData");
+    let content = document.getElementById("contents");
     let dataList =  document.getElementById("getItemInfo");
+    let dataCnt = document.getElementById("dataCnt");
 
-    btn.addEventListener("click", () => {
+    btn1.addEventListener("click", () => {
         let request = new XMLHttpRequest();
-
         // 외부에서 요청할 때는 ip 및 포트번호를 기재해야 하고, 내부에서는 생략 가능하다.
         request.open("GET", "/item/all");
         request.send('');
         request.addEventListener("load", () => {
+            dataList.innerHTML = ``;
             let data = JSON.parse(request.responseText);
-            
             if(data.result) {
                 let rows = data.allList;
                 for(let item of rows) {
@@ -48,18 +41,244 @@
                     tbody += `<td>${item.itemname}</td>`;
                     tbody += `<td>${item.price}</td>`;
                     tbody += `<td>${item.description}</td>`;
-                    tbody += `<td><img src="/img/img/${item.pictureurl}" width="200" height="200" /></td>`;
+                    tbody += `<td><img src="/img/${item.pictureurl}" width="200" height="200" /></td>`;
                     tbody += `<td>${item.updatedate}</td>`;
                     dataList.innerHTML += tbody;
                 }
             }
             else dataList.innerHTML = `<p>데이터 가져오기 실패</p>`;
-            
+
         }); 
         request.addEventListener("error", () => {
             console.log(error);
         });
     });
+
+    // 현재 페이지번호를 저장할 변수
+    let pageNo = 1;
+    btn2.addEventListener("click", () => {
+        let request = new XMLHttpRequest();
+        request.open("GET", "/item/list?pageNo=" + pageNo);
+        request.send("");
+        request.addEventListener("load", () => {
+            content.innerHTML = ``;
+            let data = JSON.parse(request.responseText);
+            if(data.result) {
+                let rows = data.dataList;
+                let count = data.dataCnt;
+                let para = `<h2>전체 상품 개수: ${count}개</h2>`;
+                content.innerHTML = para;
+                let html = `<table id="tblData">`;
+                html += `<tr>`;
+                html += `<th>상품번호</th>`;
+                html += `<th>상품명</th>`;
+                html += `<th>가격</th>`;
+                html += `<th>설명</th>`;
+                html += `<th>이미지</th>`;
+                html += `<th>수정날짜</th>`;
+                html += `</tr>`;
+
+                for(let item of rows) {
+                    html += `<tr id="record">`;
+                    html += `<td>${item.itemid}</td>`;
+                    html += `<td><a href="#" id="item-${item.itemid}" /> ${item.itemname}</td>`;
+                    html += `<td>${item.price}</td>`;
+                    html += `<td>${item.description}</td>`;
+                    html += `<td><img src="/img/${item.pictureurl}" width="200" height="200" /></td>`;
+                    html += `<td>${item.updatedate}</td>`;
+                    html += `</tr>`;
+                }
+
+                html += `</table>`;
+
+                // 더보기 구현
+                // 현재 페이지가 마지막 페이지가 아닌 경우에만 출력
+                if(((pageNo-1)*5) < count) html += `<span id="addBtn" href="#">더보기</span>`;
+
+                content.innerHTML += html;
+
+                let addBtn = document.getElementById("addBtn");
+                if(addBtn !== undefined) {
+                    addBtn.addEventListener("click", () => {
+                        pageNo = pageNo + 1;
+                        let request = new XMLHttpRequest();
+                        request.open("GET", "/item/list?pageNo=" + pageNo);
+                        request.send("");
+
+                        // 전체 데이터 개수보다 더 많이 출력하면 더보기 영역 삭제
+                        if(((pageNo) * 5) >= count) {
+                            pageNo = pageNo -1;
+                            addBtn.remove();
+                        }
+
+                        request.addEventListener("load", () => {
+                            let data = JSON.parse(request.responseText);
+                            let rows = data.dataList;
+
+                            const table = document.getElementById("tblData");
+                            for(item of rows) {
+                                let html = `<tr class="record">`;
+                                html += `<td>${item.itemid}</td>`;
+                                html += `<td><a href="#" id="item-${item.itemid}" /> ${item.itemname}</td>`;
+                                html += `<td>${item.price}</td>`;
+                                html += `<td>${item.description}</td>`;
+                                html += `<td><img src="/img/${item.pictureurl}" width="200" height="200" /></td>`;
+                                html += `<td>${item.updatedate}</td>`;
+                                html += `</tr>`;
+                                table.innerHTML += html;
+                            }
+                            
+                        });
+                    });
+                }
+            }
+            else dataList.innerHTML = `<p>데이터 가져오기 실패</p>`;            
+
+            // 상품명을 클릭하면 상세보기 출력
+            // 링크 하나하나 이벤트 처리를 한다면 비효율적이기에 부모 요소에 이벤트 처리코드를 작성.
+            content.addEventListener("click", (e) => {
+                if(e.target.id.startsWith("item")) {
+                    let iid = e.target.id.split("-")[1];
+                    let request = new XMLHttpRequest();
+                    request.open("GET", "/item/view?itemid="+iid);
+                    request.send("");
+                    request.addEventListener("load", () => {
+                        let data = JSON.parse(request.responseText);
+                        let html = ``;
+                        html += `<div align="center" class="body">`;
+                        html += `<h2>상품 상세화면</h2>`;
+                        html += `<table>`;
+                        html += `<tr>`;
+                        html += `<th>이미지</th>`;
+                        html += `<th>상품번호</th>`;
+                        html += `<th>상품명</th>`;
+                        html += `<th>가격</th>`;
+                        html += `<th>설명</th>`;
+                        html += `<th>수정날짜</th>`;
+                        html += `</tr>`;                            
+                        if(data.result) {
+                            let item = data.data;
+                            html += `<tr>`;
+                            html += `<td><a href="/img/${item.pictureurl}"><img src="/img/${item.pictureurl}" width="300" height="300" /></a></td>`;
+                            html += `<td>${item.itemid}</td>`;
+                            html += `<td>${item.itemname}</td>`;
+                            html += `<td>${item.price}</td>`;
+                            html += `<td>${item.description}</td>`;
+                            html += `<td>${item.updatedate}</td>`;
+                            html += `</tr>`;
+                        }else {
+                            html += `<p>데이터가 존재하지 않습니다.</p>`
+                        }
+                        html += `<table><tr><td colspan='2' align='center' width='240'>`;
+                        html += `<a href='#' id='updatebtn'>수정하기</a></td></tr></table>`;
+                        html += `<table><tr><td colspan='2' align='center' width='240'>`;
+                        html += `<a href='#' id='delbtn'>삭제하기</a></td></tr></table>`;
+                        html += `<table><tr><td colspan='2' align='center' width='240'>`;
+                        html += `<a href='#' id='mainbtn'>목록으로</a></td></tr></table>`;
+                        html += `</table>`;
+                        content.innerHTML = html;
+
+                         // 데이터 삭제하기
+                        let delbtn = document.getElementById("delbtn");
+                        if(delbtn !== undefined) {
+                            delbtn.addEventListener("click", (e) => {
+                                e.preventDefault(); // 기본 이벤트 제거
+                                // 폼이 없는 경우의 POST 방식 파라미터 생성
+                                let params = "itemid=" + data.data.itemid;
+                                let request = new XMLHttpRequest();
+                                request.open("POST", "/item/delete");
+                                // 폼이 아닌 경우는 폼으로 인코딩 해야한다.
+                                request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                                request.send(params);
+                                request.addEventListener("load", () => {
+                                    let data = JSON.parse(request.responseText);
+                                    console.log(data);
+                                    if(data.result) {
+                                        alert("정상적으로 삭제되었습니다.");
+                                        // 데이터 다시 불러오기
+                                        document.getElementById("getPageData").click();
+                                    }
+                                    else alert("삭제가 실패하였습니다.");
+                                });
+                            });
+                        }
+
+                        // 데이터 수정하기
+                        let updatebtn = document.getElementById("updatebtn");
+                        if(updatebtn !== undefined) {
+                            updatebtn.addEventListener("click", () => {
+                                let request = new XMLHttpRequest();
+                                request.open("GET", "/item/update");
+                                request.send("");
+                                request.addEventListener("load", () => {
+                                    let data = request.responseText;
+                                    content.innerHTML = data;
+
+                                });
+                            });
+                        }
+                    });
+                }
+            });
+        });        
+        request.addEventListener("error", () => {
+            console.log(error);    
+        });
+    });
+
+    // 데이터 추가하기
+    let addFormData = document.getElementById("addFormData");
+    addFormData.addEventListener("click", () => {
+        // 삽입화면 출력
+        content.innerHTML = ``;
+        let html = `<form id="insertForm" enctype="multipart/form-data" method="post">
+                        <p>
+                            상품명 <input type="text" name="itemname" id="itemname" />
+                        </p>
+                        <p>
+                            가격 <input type="text" name="price" id="price" />
+                        </p>
+                        <p>
+                            설명 <input type="text" name="description" id="description" />
+                        </p>
+                        <p>
+                            이미지 파일 <input type="file" name="pictureurl" id="pictureurl" />   
+                        </p>
+                        <p>
+                            <input type="submit" value="데이터 추가하기" />
+                        </p>
+                    </form>`;
+        content.innerHTML = html;
+
+        // 데이터 추가하기 이벤트
+        let formSubmit = document.getElementById("insertForm");
+        if(formSubmit !== undefined) {
+            formSubmit.addEventListener("submit", (e) => {
+                e.preventDefault(); // 기본 이벤트 제거(페이지 넘어가지 않도록)
+
+                // 폼 데이터 찾아오기
+                const formData = new FormData(document.getElementById("insertForm"));
+                
+                // 폼 데이터를 전송
+                let request = new XMLHttpRequest();
+                request.open("POST", "/item/insert", true);
+                request.send(formData);
+                
+                request.addEventListener("load", () => {
+                    let data = JSON.parse(request.responseText);
+                    if(data.result) {
+                        alert("데이터가 정상적으로 추가되었습니다.");
+                        // 데이터 다시 불러오기
+                        document.getElementById("getPageData").click();
+                    }   
+                    else alert("데이터가 추가되지 않았습니다.");
+                });
+            });
+        }
+    });
+
+   
+    
 
 </script>
 </html>

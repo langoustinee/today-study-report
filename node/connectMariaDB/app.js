@@ -163,19 +163,182 @@ app.get("/item/list", (req, res) => {
     // 데이터 개수:10, 1페이지의 시작번호 0, 2페이지:10, 3페이지:20, 4페이지:30 ...
     // 건너뛸 데이터 개수 = (페이지번호-1) * 데이터개수
     // 가지고 있는 데이터보다 이후의 데이터를 요구하면 클라이언트 단에서 서버에게 요청하지 못하도록 작업해야 하기에 항상 전체 데이터 개수를 전송해줘야한다.
-    let start = (pageNo - 1) * 5;
+    let start = (pageNo - 1) * 5; // 페이징 처리에 사용할 변수
+    let result = true; // 성공 및 실패 여부 저장
+    let dataList; // 성공시 데이터를 저장
     connection.query("select * from goods order by itemid desc limit ?, 5", [parseInt(start)], (err, results, fields) => {
         if(err) {
             console.log(err);
-            res.json({ "result":false });
+            result = false;
         }   
         else {
-            res.json({ "result":false, "list":results });
+            dataList = results;
+            
+            // 전체 데이터 개수를 가져오기
+            // node에서 select 구문을 실행했을 때의 결과는 무조건 배열이다.
+            let count = 0;
+            connection.query("select count(*) count from goods", (err, results, fields) => {
+                if(err) {
+                    console.log(err);
+                    result = false;
+                }
+                else {
+                    // 하나의 행이기에 인덱스로 접근한다.
+                    count = results[0].count;
+                    
+                    // 응답을 전송
+                    if(result === false) res.json({ "result":false });
+                    else res.json({ "result":true,  "dataCnt":count, "dataList":dataList });
+                }
+            });
+        }
+    });    
+});
+
+// 데이터 상세보기
+app.get("/item/view", (req, res) => {
+    const iid = req.query.itemid;
+    console.log(iid);
+    let result = true;
+    let data;
+    // itemid를 이용해서 1개의 데이터를 가져오기
+    connection.query("select * from goods where itemid=?", iid, (err, results, fields) => {
+        if(err) {
+            console.log(err);
+            result = false;
+        }
+        else {
+            data = results[0];
+            console.log(data);
+        }
+        // 응답을 전송
+        if(result === false) res.json({ "result":false });
+        else res.json({ "result":true,  "data":data });
+    });
+});
+
+// 이미지 다운로드 처리
+app.get("/img/:pictureurl", (req, res) => {
+    const pictureurl = req.params.pictureurl;
+    console.log(pictureurl);
+
+    // 이미지 파일의 절대 경로 생성
+    let file = "C:/Users/user/Documents/frontend/node/connectMariaDB/public/img" + "/" + pictureurl;
+    console.log(__dirname);
+    
+    // 파일의 이름을 가지고 타입을 생성
+    let mimeType = mime.lookup(pictureurl);
+    res.setHeader('Content-disposition', 'attachment; filename=' + pictureurl);
+    res.setHeader('Content-type', mimeType);
+    
+    // 파일의 내용을 읽어 res에 전송
+    let fileStream = fs.createReadStream(file);
+    fileStream.pipe(res);
+});
+
+// 현재날짜를 문자열로 리턴하는 함수
+const getDate = () => {
+    let date = new Date();
+    let year = date.getFullYear();
+    let mon = date.getMonth() + 1; // 월은 +1을 해야한다.
+    let day = date.getDate();
+    // 월, 일을 두자리수로 맞추기
+    mon = mon >= 10 ? mon : "0" + mon;
+    day = day >= 10 ? day : "0" + day;
+    return year + "-" + mon + "-" + day
+};
+
+// 현재날짜 및 시간을 문자열로 리턴하는 함수
+const getTime = () => {
+    let date = new Date();
+    let hour = date.getHours();
+    let min = date.getMinutes();
+    let sec = date.getSeconds();
+    hour = hour >= 10 ? hour : "0" + hour;
+    min = min >= 10 ? min : "0" + min;
+    sec = sec >= 10 ? sec : "0" + sec;
+    return getDate() + " " + hour + ":" + min + ":" + sec;
+};
+
+// 데이터 삽입하기
+// itemid중에서 가장 큰 itemid를 찾아서 +1
+// itemname, price, description, pictureurl(파일)은 직접 입력
+// updateadate는 현재 날짜를 문자열로 입력
+// 삽입, 삭제, 수정 작업이 발생하면 update.txt 파일에 작업 시각 기록.
+app.post("/item/insert", upload.single("pictureurl"), (req, res) => {
+    // 파라미터 읽기
+    const itemname = req.body.itemname;
+    const description = req.body.description;
+    const price = req.body.price;
+
+    // 파일 이름
+    let pictureurl;
+    if(req.file) pictureurl = req.file.filename;
+    else pictureurl = "default.jpg";
+
+    // 가장 큰 itemid 찾기
+    connection.query("select max(itemid) max from goods", (err, results, fields) => {
+        if(err) {
+            console.log(err);
+        }
+        else {
+            let itemid;
+            if(results.length > 0) itemid = results[0].max + 1;
+            else itemid = 1;
+            // 데이터 삽입 구문
+            connection.query("insert into goods(itemid, itemname, price, description, pictureurl, updatedate) values (?, ?, ?, ?, ?, ?)", [itemid, itemname, price, description, pictureurl, getDate()], (err, results, fields) => {
+                let result = true;
+                if(err) {
+                    console.log(err);
+                    result = false;
+                }
+                if(result === false) res.json({ "result":false });
+                else {
+                    console.log("삽입 성공!!");
+                    // 성공했을 때 현재 날짜 및 시간을 update.txt에 기록한다.
+                    logWrite();
+                    res.json({ "result":true });
+                }
+            });
         }
     });
-
-    
 });
+
+// 데이터 삭제하기
+app.post("/item/delete", (req, res) => {
+    // post 방식으로 전송된 데이터를 읽기
+    let itemid = req.body.itemid;
+    connection.query("delete from goods where itemid=?", [itemid], (err, results, fields) => {
+        let result = true;
+        if(err) {
+            console.log(err);
+            result = false;
+        }
+        if(result === false) res.json({ "result":false });
+        else {
+            console.log("삭제 성공!!");
+            // 삭제 성공했을 때 현재 날짜 및 시간을 update.txt에 기록한다.
+            logWrite();
+            res.json({ "result":true });
+        }
+    })
+});
+
+const logWrite = () => {
+    // 현재 날짜 및 시간을 update.txt에 기록한다.
+    const writeStream = fs.createWriteStream("./update.txt");
+    writeStream.write(getTime());
+    writeStream.end();
+}
+
+// 데이터 수정하기 - 수정화면으로 이동
+app.get("/item/update", (req, res) => {
+    // public 디렉토리의 update.html 읽어 리턴한다.
+    fs.readFile("./public/update.html", (err, data) => {
+        res.end(data);
+    });
+});
+
 
 // 에러 발생시 처리
 app.use((err, req, res, next) => {
