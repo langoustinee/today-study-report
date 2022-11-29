@@ -1,0 +1,43 @@
+const { STRING } = require('sequelize');
+const Sequelize = require('sequelize');
+
+module.exports = class Good extends Sequelize.Model {
+    static init(sequelize) {
+        return super.init({
+            itemid: {
+                type: Sequelize.INTEGER.UNSIGNED,
+                allowNull: false,
+                unique:true
+            },
+            itemname: {
+                type: Sequelize.STRING(100),
+                allowNull:true
+            },
+            price: {
+                type: Sequelize.INTEGER.UNSIGNED,
+                allowNull:true
+            },
+            description: {
+                type: Sequelize.STRING(200),
+                allowNull:true
+            },
+            pictureurl: {
+                type: Sequelize.STRING(100),
+                allowNull:true
+            },
+            updatedate: {
+                type: Sequelize.STRING(20),
+                allowNull:true
+            }
+        }, {
+            sequelize,
+            timestamps: true,
+            underscored: false,
+            modelName: 'Good',
+            tableName: 'goods',
+            paranoid: true,
+            charset: 'utf8',
+            collate: 'utf8_general_ci'
+        });
+    }
+};

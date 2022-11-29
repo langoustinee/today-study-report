@@ -63,9 +63,11 @@
         request.addEventListener("load", () => {
             content.innerHTML = ``;
             let data = JSON.parse(request.responseText);
+            console.log(data);
             if(data.result) {
                 let rows = data.dataList;
                 let count = data.dataCnt;
+                
                 let para = `<h2>전체 상품 개수: ${count}개</h2>`;
                 content.innerHTML = para;
                 let html = `<table id="tblData">`;
@@ -211,9 +213,42 @@
                                 request.open("GET", "/item/update");
                                 request.send("");
                                 request.addEventListener("load", () => {
-                                    let data = request.responseText;
-                                    content.innerHTML = data;
+                                    let item = request.responseText;
+                                    content.innerHTML = item;
 
+                                    // 데이터를 수정하기 위한 원본 데이터를 input에 출력하기
+                                    document.getElementById("itemid").value = data.data.itemid;
+                                    document.getElementById("itemid").readOnly = true;
+                                    document.getElementById("itemname").value = data.data.itemname;
+                                    document.getElementById("price").value = data.data.price;
+                                    document.getElementById("description").value = data.data.description;
+                                    // 이전의 원본 이미지 파일의 이름을 숨기고 화면에 출력하기
+                                    document.getElementById("oldpictureurl").value = data.data.pictureurl;
+                                    document.getElementById("picture").src = `/img/${data.data.pictureurl}`;
+
+                                    // 수정할 폼 가져오기
+                                    let updateForm = document.getElementById("updateForm");
+                                    if(updateForm !== undefined) {
+                                        updateForm.addEventListener("submit", (e) => {
+                                            e.preventDefault(); // 기본 이벤트 제거
+                                            // 전송할 폼 데이터 생성
+                                            const formData = new FormData(updateForm);
+                                            // 서버에게 수정 요청
+                                            let request = new XMLHttpRequest();
+                                            request.open("POST", "/item/update");
+                                            request.send(formData);
+                                            request.addEventListener("load", () => {
+                                                let result = JSON.parse(request.responseText);
+                                                if(result.result) {
+                                                    alert("정상적으로 수정되었습니다.");
+                                                    // 데이터 다시 불러오기
+                                                    document.getElementById("getPageData").click();
+                                                }
+                                                else alert("수정을 완료하지 못했습니다.");
+                                            });
+
+                                        });
+                                    }
                                 });
                             });
                         }
