@@ -191,7 +191,6 @@ app.post("/item/insert", upload.single("pictureurl"), (req, res) => {
     });
 });
 
-
 // node DB의 item 컬렉션의 데이터 하나 수정하기
 // app.post("item/update/:itemid", (req, res) => {
 
