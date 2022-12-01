@@ -1,0 +1,16 @@
+{
+    "keepSettings": {
+        "type": 2,
+        "amount": 10
+    },
+    "auditFilename": "audit.json",
+    "hashType": "md5",
+    "extension": "",
+    "files": [
+        {
+            "date": 1669874022537,
+            "name": "C:\\Users\\user\\Documents\\frontend\\node\\developApiServer\\log\\access-20221201.log",
+            "hash": "1ed3a72840c423f2914b48c099da2639"
+        }
+    ]
+}
