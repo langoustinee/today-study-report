@@ -1,25 +1,37 @@
 const express = require('express');
-
 const jwt = require('jsonwebtoken');
+const { verifyToken, deprecated } = require('./middlewares');
+const { Domain, User, Post, Hashtag } = require('../models');
 
-const { verifyToken } = require('./middlewares');
-const { Domain, User } = require('../models');
 const router = express.Router();
 
-// 토큰을 확인하기 위한 처리
-router.get('/test', verifyToken, (req, res) => {
-    res.json(req.decoded);
+// v1.js 사용불가하도록 설정
+router.use(deprecated);
+
+// 데이터를 반환하는 요청 처리하기
+router.get("/posts/my", verifyToken, (req, res) => {
+    Post.findAll({ where: { userId:req.decoded.id } })
+    .then((posts) => {
+        console.log(posts);
+        res.json({ code: 200, payload: posts });
+    })
+    .catch((error) => {
+        console.error(error);
+        return res.status(500).json({ code: 500, message: "서버 에러" });
+    });
 });
 
+// 토큰 발급하기
 router.post('/token', async (req, res) => {
     const { clientSecret } = req.body;
     try {
+        // domain 찾아오기
         const domain = await Domain.findOne({
             where: { clientSecret },
             include: {
                 model: User,
-                attribute: ['nick', 'id'],
-            },
+                attribute: ['nick', 'id']
+            }
         });
         if (!domain) {
             return res.status(401).json({
@@ -29,23 +41,28 @@ router.post('/token', async (req, res) => {
         }
         const token = jwt.sign({
             id: domain.User.id,
-            nick: domain.User.nick,
+            nick: domain.User.nick
         }, process.env.JWT_SECRET, {
-            expiresIn: '1m', // 1분
-            issuer: 'nodebird',
+            expiresIn: '1m', // 유효기간 1분
+            issuer: 'lango'
         });
         return res.json({
             code: 200,
             message: '토큰이 발급되었습니다',
-            token,
+            token
         });
     } catch (error) {
         console.error(error);
         return res.status(500).json({
             code: 500,
-            message: '서버 에러',
+            message: '서버 에러'
         });
     }
+});
+
+// 토큰을 확인하기 위한 처리
+router.get('/test', verifyToken, (req, res) => {
+    res.json(req.decoded);
 });
 
 module.exports = router;

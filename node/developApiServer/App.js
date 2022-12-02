@@ -87,10 +87,14 @@ app.use('/', indexRouter);
 const authRouter = require('./routes/auth');
 app.use('/auth', authRouter);
 
-app.use('/img', express.static(path.join(__dirname, 'uploads')));
-
 const v1 = require('./routes/v1');
 app.use ('/v1',v1);
+
+const v2 = require('./routes/v2');
+app.use ('/v2',v2);
+
+app.use('/img', express.static(path.join(__dirname, 'uploads')));
+
 
 // 404 에러가 발생한 경우 처리
 app.use((req, res, next) => {
