@@ -91,7 +91,7 @@ const v1 = require('./routes/v1');
 app.use ('/v1',v1);
 
 const v2 = require('./routes/v2');
-app.use ('/v2',v2);
+app.use ('/v2',v1);
 
 app.use('/img', express.static(path.join(__dirname, 'uploads')));
 
