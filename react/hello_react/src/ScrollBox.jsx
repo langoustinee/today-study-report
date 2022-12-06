@@ -1,12 +1,6 @@
 import React, {Component} from "react";
 
 class ScrollBox extends Component {
-    // 스크롤 박스의 스크롤을 맨 아래로 이동시키는 메서드
-    scrollToBottom = () => {
-        const {scrollHeight, clientHeight} = this.box;
-        this.box.scrollTop = scrollHeight - clientHeight;
-    };
-    
     render(){
         const style = {
             border: '1px solid black',
@@ -24,11 +18,18 @@ class ScrollBox extends Component {
 
         return(
             <div style={ style }
-            ref={ ref => {this.bo = ref;} }>
+            ref={ ref => {this.box = ref;} }>
                 <div style={ innerStyle } />
             </div>
         );
     }
+
+    // 스크롤 박스의 스크롤을 맨 아래로 이동시키는 메서드
+    scrollToBottom = () => {
+        const {scrollHeight, clientHeight} = this.box;
+        this.box.scrollTop = scrollHeight - clientHeight;
+    };
+    
 }
 
 export default ScrollBox;
