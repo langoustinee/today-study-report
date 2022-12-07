@@ -1,7 +1,8 @@
-import React, {Component, useEffect, useState, useRef, useMemo} from "react";
+import React, {Component, useEffect, useState, useRef, useMemo, useCallback} from "react";
 import InputFocusSample from "./InputFocusSample";
 import UserList from "./UserList";
 import UserCreation from "./UserCreation";
+import Average from "./AverageSample";
 
 // 클래스형 컴포넌트 생성
 // import React, { Component } from "react";
@@ -134,18 +135,18 @@ const App = () => {
 
   const {username, email} = inputs;
 
-  const onChange = (e) => {
+  const onChange = useCallback((e) => {
     setInputs({
       ...inputs,
       [e.target.name]: e.target.value
     });
-  };
+  }, [inputs]);
 
   // 최신 id 변수 생성
   const nextId = useRef(4);
 
   // 데이터 삽입 메서드
-  const onCreate = () => {
+  const onCreate = useCallback(() => {
     // 하나의 객체 생성
     const user = {
       id:nextId.current,
@@ -163,23 +164,23 @@ const App = () => {
 
     // 최신 id를 부여하기 위해 id 증가
     nextId.current += 1;
-  };
+  }, [users, username, email]);
 
   // 데이터 삭제 메서드
-  const onRemove = (id) => {
+  const onRemove = useCallback((id) => {
     // users state에서 동일한 id를 가진 데이터 삭제
     // id가 일치하지 않는 데이터만 삭제
     // 실제로 id가 일치하지 않는 데이터만 가지고 배열을 만들어서 수정한다.
     setUsers(users.filter(user => user.id !== id));
-  };
+  }, [users]);
 
   // 데이터 수정 메서드
   // id에 해당하는 데이터의 active 속성의 값을 반전시킨다.
-  const onToggle = (id) => {
+  const onToggle = useCallback((id) => {
     setUsers(users.map(
         user => user.id === id ? {...user, active: !user.active} : user
       ));
-  };
+  }, [users]);
 
   // 활성화된 user 개수를 세는 함수 호출
   // users에 변화가 생길 때만 함수를 호출하고 그 이외의 경우는 결과를 복사하도록 수정.
@@ -188,30 +189,34 @@ const App = () => {
 
   return(
     <>
-      <ClassState/>
+      {/* <ClassState/> */}
       <br/>
-      <FunctionState/>
+      {/* <FunctionState/> */}
       <br/>
-      <InputFocusSample/>
+      {/* <InputFocusSample/> */}
       <br/>
-      <ClassEffect/>
+      {/* <ClassEffect/> */}
       <br/>
-      <FunctionEffect/>
+      {/* <FunctionEffect/> */}
       <br/>
       <br/>
 
       <div>
-        <UserCreation 
+        {/* <UserCreation 
           username={username} 
           email={email} 
           onChange={onChange} 
           onCreate={onCreate}
-        />
-        <UserList users={users} onRemove={onRemove} onToggle={onToggle} />  
-        <h4>활성화된 사용자 수: {count}</h4>
+        /> */}
+        {/* <UserList users={users} onRemove={onRemove} onToggle={onToggle} />  
+        <h4>활성화된 사용자 수: {count}</h4> */}
       </div>
+
+      <br/>
+      <br/>
+      <Average/>
     </>
-  );
+  )
 }
 
 export default App;
