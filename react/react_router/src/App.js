@@ -27,7 +27,7 @@ const App = () => {
       <Route path=":id" element={<Article />} />
     </Route>
     
-    <Route path="/colorbox" element={<ColorBox />} />
+    <Route path="colorbox" element={<ColorBox />} />
     <Route path="*" element={<NotFound />} />
     </Routes>
   );
