@@ -4,4 +4,8 @@ node_modules
 *.jpg
 *.jpeg
 *.png
-/java
+
+.idea
+out
+*.imi
+#/java
