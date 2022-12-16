@@ -5,6 +5,7 @@ import java.util.Arrays;
 public class Main {
     public static void main(String[] args) {
         /*
+        *  2022-12-14
         // Student 클래스의 인스턴스 생성하기
         Student stu1 = new Student();
         // 자신의 속성에 접근하기
@@ -31,6 +32,8 @@ public class Main {
         System.out.println(stu1.schoolName + " "+ stu2.schoolName);
         */
 
+        /*
+        *  2022-12-15
         // static 메서드는 클래스 이름으로 호출할 수 있다.
         MethodClass.method1();
         // instance 메서드는 클래스이름으로 호출할 수 없다.
@@ -83,5 +86,6 @@ public class Main {
         VarArgs.display("JPA");
         VarArgs.display("Sequelize", "Mongoose");
         VarArgs.display("Carsandra");
+        */
     }
 }
