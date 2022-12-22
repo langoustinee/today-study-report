@@ -11,3 +11,5 @@ out
 #/java
 
 documents
+*.properties
+*.xml
