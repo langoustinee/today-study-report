@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 public class TryCatch {
     public static void main(String[] args) {
         // BufferedReader로 입력받기
+        /*
         BufferedReader br = null;
         try {
             br = new BufferedReader(new InputStreamReader(System.in));
@@ -17,6 +18,14 @@ public class TryCatch {
             } catch (Exception ex) {
                 System.out.println(ex.getLocalizedMessage());
             }
+        }
+        */
+
+        // BufferedReader로 입력받기
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
+            System.out.println(br.readLine());
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
         }
     }
 }
