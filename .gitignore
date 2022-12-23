@@ -13,3 +13,7 @@ out
 documents
 *.properties
 *.xml
+
+*.txt
+*.log
+*.dat
