@@ -1,4 +1,4 @@
-package kakao.lango.network.stream;
+package kakao.lango.stream;
 
 import java.util.ArrayList;
 import java.util.Iterator;

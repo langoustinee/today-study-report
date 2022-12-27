@@ -17,3 +17,7 @@ documents
 *.txt
 *.log
 *.dat
+
+target
+*.json
+*.csv

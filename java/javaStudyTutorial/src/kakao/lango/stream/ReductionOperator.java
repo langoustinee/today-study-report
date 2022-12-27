@@ -1,6 +1,5 @@
-package kakao.lango.network.stream;
+package kakao.lango.stream;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
