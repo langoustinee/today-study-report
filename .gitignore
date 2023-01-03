@@ -197,3 +197,6 @@ mvnw.cmd
 *.MF
 
 /webapp/WEB-INF/classes/
+
+.metadata
+Servers
