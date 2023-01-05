@@ -200,3 +200,7 @@ mvnw.cmd
 
 .metadata
 Servers
+.classpath
+.project
+.springBeans
+.settings
