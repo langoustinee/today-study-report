@@ -13,9 +13,22 @@
 <link rel="stylesheet" href="./css/style.css" />
 </head>
 <body>
-
+	<a href="item.xls">엑셀 다운로드</a>
+	<br>
+	<a href="pdf">PDF 다운로드</a>
+	<br>
+	<a href="itemlist.json">json 다운로드</a>
+	<br>
+	<a href="item.csv">텍스트 출력하기</a>
+	<br>
+	<a href="itemlistrest.json">json 다운로드[rest]</a>
+	<br>	
+	<a href="exception">예외 발생</a>
+	<br>
+	<a href="message">메시지 출력하기</a>
+	<br>
 	<div align="center" class="body">
-		<H2>상품 목록</H2>
+		<h2>상품 목록</h2>
 		<table border="1">
 			<tr class="header">
 				<th align="center" width="80">상품 번호</th>
@@ -24,9 +37,11 @@
 			</tr>
 			<c:forEach var="item" items="${list}">
 				<tr class="record">
-					<td align="center" width="80">${item.itemid}</th>
-					<td align="center" width="80">${item.itemname}</th>
-					<td align="center" width="80">${item.price}</th>
+					<td align="center" width="80">${item.itemid}</td>
+					<td align="center" width="80">
+						<a href="detail/${item.itemid}">${item.itemname}</a>
+					</td>
+					<td align="center" width="80">${item.price}</td>
 				</tr>
 			</c:forEach>
 		</table>

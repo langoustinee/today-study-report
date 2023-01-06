@@ -10,6 +10,9 @@ public interface ItemService {
 	// 전체 데이터를 가져오는 메서드
 	public List<ItemDTO> allItem();
 	
+	// 데이터 하나를 가져오는 메서드
+	public ItemDTO getItem(int itemid);
+	
 	// DTO를 Entity로 변환하는 메서드
 	// default 키워드로 메서드 구현하기
 	public default ItemEntity toEntity(ItemDTO dto) {

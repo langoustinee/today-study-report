@@ -25,13 +25,25 @@ public class ItemServiceImpl implements ItemService {
 		
 		// Repository의 메서드 호출하기
 		List<ItemEntity> result = itemMapper.allItem();
-		
+		// list는 null 여부를 확인하지 않아도 무방하다.
 		// 결과 밙환하기
 		for(ItemEntity entity : result) {
 			list.add(toDTO(entity));
 		}
 		
 		return list;
+	}
+
+	@Override
+	public ItemDTO getItem(int itemid) {
+		ItemDTO dto = null;
+		// 데이터 가져오기
+		ItemEntity entity = itemMapper.getItem(itemid);
+		// entity null 여부 확인하고 DTO로 변환하기
+		if(entity != null) {
+			dto = toDTO(entity);
+		}
+		return dto;
 	}
 	
 	
