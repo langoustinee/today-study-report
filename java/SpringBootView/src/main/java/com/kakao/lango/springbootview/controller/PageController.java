@@ -20,6 +20,7 @@ import java.util.stream.IntStream;
 public class PageController {
 
     private Logger LOGGER = LoggerFactory.getLogger(PageController.class);
+
     @GetMapping("/")
     public String main(Model model) {
         Map<String, Object> m = new HashMap<>();
@@ -61,4 +62,22 @@ public class PageController {
         model.addAttribute("list", list);
     }
 
+    @GetMapping({"/link", "/format"})
+    public void linkTest(Model model) {
+        List<SampleVO> list = new ArrayList<>();
+        for (Long i = 0L; i < 10; i++) {
+            SampleVO vo = SampleVO.builder()
+                    .sno(i)
+                    .first("Frist .. " + i)
+                    .last("Last .. " + i)
+                    .regTime(LocalDateTime.now())
+                    .build();
+            list.add(vo);
+        }
+        model.addAttribute("list", list);
+        System.out.println(list);
+    }
+
+    @GetMapping("/layouts")
+    public void layouts() { }
 }

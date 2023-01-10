@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">+
+<head>
+    <meta charset="UTF-8">
+    <title>Format Test</title>
+</head>
+<body>
+  <ul>
+    <li th:each="vo : ${list}">
+      [[${#numbers.formatInteger(vo.sno, 5)}]] --- [[${#temporals.format(vo.regTime, 'yyyy/MM/dd')}]]
+    </li>
+  </ul>
+</body>
+</html>
