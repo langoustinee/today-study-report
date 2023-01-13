@@ -140,4 +140,30 @@ public class RepositoryTest {
 
     }
 
+    @Test
+    public void searchOne() {
+        boardRepository.searchOne();
+    }
+
+    @Test
+    public void searchPage() {
+        // bno는 내림차순으로, title을 오름차순으로 검색한다.
+        Pageable pageable = PageRequest.of(0,10,
+                Sort.by("bno").descending()
+                        .and(Sort.by("title").ascending()));
+
+        // title에 1이라는 문자가 포함된 데이터만 검색하기
+        Page<Object[]> result = boardRepository.searchPage("c", "초밥", pageable);
+        for (Object[] res : result.getContent()) {
+            System.out.println(Arrays.toString(res));
+        }
+    }
+
+    @Test
+    public void getListReply() {
+        List<Reply> replyList = replyRepository.findByBoardOrderByRno(Board.builder().bno(100L).build());
+        replyList.forEach(
+                reply -> System.out.println(reply)
+        );
+    }
 }

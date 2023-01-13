@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDateTime;
+
 @SpringBootTest
 public class ServiceTest {
     // 필드로 BoardService 주입받기
@@ -46,9 +48,10 @@ public class ServiceTest {
     @Test
     public void modify() {
         BoardDTO dto = BoardDTO.builder()
-                .bno(153L)
-                .title("제목을 수정합니다.")
-                .content("내용을 수정합니다.")
+                .bno(50002L)
+                .title("[수정] 오늘의 점심은?")
+                .content("[수정] 짜장 대 짬뽕")
+                .updatedAt(LocalDateTime.now())
                 .build();
         System.out.println(boardService.modify(dto));
     }

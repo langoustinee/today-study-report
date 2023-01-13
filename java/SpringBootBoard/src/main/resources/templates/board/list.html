@@ -7,8 +7,31 @@
                 <a th:href="@{/board/register}">
                 <button type="button" class="btn btn-outline-primary">REGISTER</button>
                 </a>
+                <div th:if="${msg != null}" th:text="${msg}"></div>
             </span>
         </h1>
+
+        <!--검색을 위한 폼-->
+        <form action="/board/list" method="GET" id="searchForm">
+            <div class="input-group">
+                <input type="hidden" name="page" value="1">
+                <div class="input-group-prepend">
+                    <select class="custom-select" name="type">
+                        <option th:selected="${pageRequestDTO.type == null}">select option!</option>
+                        <option value="t" th:selected="${pageRequestDTO.type =='t'}" >제목</option>
+                        <option value="c" th:selected="${pageRequestDTO.type =='c'}" >내용</option>
+                        <option value="w" th:selected="${pageRequestDTO.type =='w'}" >작성자</option>
+                        <option value="tc" th:selected="${pageRequestDTO.type =='tc'}" >제목+내용</option>
+                        <option value="tcw" th:selected="${pageRequestDTO.type =='tcw'}" >제목+내용+작성자</option>
+                    </select>
+                </div>
+                <input class="form-control" name="keyword" id="input-content" th:value="${pageRequestDTO.keyword}">
+                <div class="input-group-append" id="button-addon4">
+                    <button class="btn btn-outline-secondary btn-search" id='btn-search' type="button">Search</button>
+                    <button class="btn btn-outline-secondary btn-clear" id='btn-clear' type="button">Clear</button>
+                </div>
+            </div>
+        </form>
 
         <table class="table table-striped">
             <thead>
@@ -26,7 +49,11 @@
                         [[${dto.bno}]]
                     </a>
                 </th>
-                <td>[[${dto.title}]] ---------------- [<b th:text="${dto.replyCount}"></b>]</td>
+                <td>
+                    <a th:href="@{/board/read(bno=${dto.bno}, page=${result.page}, type=${pageRequestDTO.type} , keyword = ${pageRequestDTO.keyword})}">
+                        [[${dto.title}]] ---------------- [<b th:text="${dto.replyCount}"></b>]
+                    </a>
+                </td>
                 <td>[[${dto.writerName}]] <small>[[${dto.writerEmail}]]</small> </td>
                 <td>[[${#temporals.format(dto.createdAt, 'yyyy/MM/dd')}]]</td>
             </tr>
@@ -45,6 +72,23 @@
                 <a class="page-link" th:href="@{/board/list(page= ${result.end + 1} ,type=${pageRequestDTO.type}, keyword = ${pageRequestDTO.keyword} )}">Next</a>
             </li>
         </ul>
+        <script th:inline="javascript">
+            // 검색 폼 가져오기
+            let searchForm = document.getElementById("searchForm");
+            let inputContent = document.getElementById("input-content");
 
+            // 검색 버튼 이벤트
+            document.getElementById("btn-search").addEventListener("click", (e)=>{
+                searchForm.submit();
+            });
+
+            // 검색 초기화 버튼 이벤트
+            document.getElementById("btn-clear").addEventListener("click", (e)=>{
+                inputContent.value = "";
+                inputContent.submit();
+                searchForm.reset();
+                searchForm.submit();
+            });
+        </script>
     </th:block>
 </th:block>

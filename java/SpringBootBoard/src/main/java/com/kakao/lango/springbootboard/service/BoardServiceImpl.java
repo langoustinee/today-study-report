@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -37,13 +38,29 @@ public class BoardServiceImpl implements BoardService {
         return board.getBno();
     }
 
+    // 목록 요청 메소드
     @Override
     public PageResponseDTO<BoardDTO, Object[]> getList(PageRequestDTO pageRequestDTO) {
         log.info("[BoardService] pageRequestDTO: " + pageRequestDTO);
         // Entity를 DTO로 변환하는 람다 인스턴스 생성하기
         // Join을 하여 결과를 가져오기 때문에 Object 배열로 받아온다.
         Function<Object[], BoardDTO> fn = (en -> entityToDto((Board) en[0], (Member) en[1], (Long) en[2]));
-        Page<Object[]> result = boardRepository.getBoardWithReplyCount(pageRequestDTO.getPageable((Sort.by("bno").descending())));
+
+        // 아래의 코드는 검색 적용이 안됨
+        // Page<Object[]> result = boardRepository.getBoardWithReplyCount(pageRequestDTO.getPageable((Sort.by("bno").descending())));
+
+        // 검색이 적용된 메소드를 호출하도록 수정하기
+        Page<Object[]> result = boardRepository.searchPage(
+                pageRequestDTO.getType(),
+                pageRequestDTO.getKeyword(),
+                pageRequestDTO.getPageable(Sort.by("bno").descending()));
+
+        System.out.println("result: " + result);
+
+        for(Object[] res : result.getContent()) {
+            System.out.println("res: " + Arrays.toString(res));
+        }
+
         return new PageResponseDTO<>(result, fn);
     }
 
