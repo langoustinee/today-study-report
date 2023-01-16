@@ -12,7 +12,7 @@ import lombok.*;
 @Entity
 public class Board extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long bno;
     private String title;
     private String content;

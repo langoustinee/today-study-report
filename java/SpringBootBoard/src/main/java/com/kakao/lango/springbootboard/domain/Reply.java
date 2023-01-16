@@ -12,7 +12,7 @@ import lombok.*;
 @Entity
 public class Reply extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long rno;
     private String text;
     private String replyer;

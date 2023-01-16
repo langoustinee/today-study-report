@@ -3,17 +3,23 @@ package com.kakao.lango.springbootboard.service;
 import com.kakao.lango.springbootboard.dto.BoardDTO;
 import com.kakao.lango.springbootboard.dto.PageRequestDTO;
 import com.kakao.lango.springbootboard.dto.PageResponseDTO;
+import com.kakao.lango.springbootboard.dto.ReplyDTO;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @SpringBootTest
 public class ServiceTest {
     // 필드로 BoardService 주입받기
     @Autowired
     private BoardService boardService;
+
+    @Autowired
+    private ReplyService replyService;
 
     @Test
     public void register() {
@@ -55,5 +61,30 @@ public class ServiceTest {
                 .build();
         System.out.println(boardService.modify(dto));
     }
+    
+    
+    
+    /*
+    * 댓글 요청 처리 메소드들을 테스트하기
+    *
+    * */
+
+    @Test
+    public void getReplyList() {
+        // 게시글번호(bno)를 이용해 댓글 가져오기
+        List<ReplyDTO> list = replyService.getList(27L);
+        list.forEach(dto -> System.out.println(dto));
+    }
+
+    @Test
+    public void insertReply() {
+        ReplyDTO dto = ReplyDTO.builder()
+                .text("댓글을 새로 등록합니다~!")
+                .replyer("user1@kakao.com")
+                .bno(30L)
+                .build();
+        System.out.println(replyService.register(dto));
+    }
+    
     
 }

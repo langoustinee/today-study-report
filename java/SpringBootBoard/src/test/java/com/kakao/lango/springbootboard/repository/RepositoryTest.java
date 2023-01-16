@@ -33,7 +33,7 @@ public class RepositoryTest {
 
     @Test
     public void insertMember() {
-        for (int i = 0; i <= 100; i++) {
+        for (int i = 1; i <= 100; i++) {
             Member member = Member.builder()
                     .email("user" + i + "@kakao.com")
                     .password("kakao" + i)
@@ -45,7 +45,7 @@ public class RepositoryTest {
 
     @Test
     public void insertBoard() {
-        for (int i = 0; i <= 100; i++) {
+        for (int i = 1; i <= 100; i++) {
             Member member = Member.builder()
                     .email("user" + i + "@kakao.com")
                     .build();
