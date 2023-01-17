@@ -2,9 +2,11 @@ package com.kakao.lango.moviereview.repository;
 
 import com.kakao.lango.moviereview.domain.Member;
 import com.kakao.lango.moviereview.persistence.MemberRepository;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Commit;
 
 import java.util.stream.IntStream;
 

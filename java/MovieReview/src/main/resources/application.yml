@@ -17,6 +17,18 @@ spring:
   thymeleaf:
   cache: false
 
+  servlet:
+    multipart:
+      enabled: true
+      location: C:\Users\user\Documents\study\data
+      max-request-size: 30MB
+      max-file-size: 10MB
+
 logging:
   level:
     org.hibernate.type.descriptor.sql: trace
+
+com:
+  lango:
+    upload:
+      path: C:\Users\user\Documents\study\data

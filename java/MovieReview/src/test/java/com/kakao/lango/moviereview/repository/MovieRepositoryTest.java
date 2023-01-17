@@ -15,6 +15,7 @@ import org.springframework.data.domain.Sort;
 
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.IntStream;
 
@@ -49,9 +50,17 @@ public class MovieRepositoryTest {
     @Test
     public void join() {
         Pageable pageable = PageRequest.of(0,10, Sort.Direction.DESC, "mno");
-        Page<Object[]> result = movieRepository.getList(pageable);
+        Page<Object[]> result = movieRepository.getAllMovieList(pageable);
         for(Object[] objects : result.getContent()){
             System.out.println(Arrays.toString(objects));
+        }
+    }
+
+    @Test
+    public void getOneMovieList() {
+        List<Object[]> list = movieRepository.getOneMovieList(27L);
+        for(Object[] movieList : list) {
+            System.out.println(Arrays.toString(movieList));
         }
     }
 
