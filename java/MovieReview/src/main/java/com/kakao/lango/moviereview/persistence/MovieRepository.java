@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface MovieRepository extends JpaRepository<Movie, Long> {
     /**
-     * 영화 정보를 가지고 영화 이미지와 리뷰개수 및 리뷰 평점의 평규능ㄹ 구해주는 메소드
+     * 영화 정보를 가지고 영화 이미지와 리뷰개수 및 리뷰 평점의 평균을 구해주는 메소드
      * JPQL에서는 m이 0번
      * mi가 1번
      * avg(coalesce(r.grade, 0))가 2번

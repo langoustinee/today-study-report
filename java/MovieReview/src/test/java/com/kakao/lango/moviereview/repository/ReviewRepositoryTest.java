@@ -43,7 +43,7 @@ public class ReviewRepositoryTest {
     }
 
     @Test
-//    @Transactional
+    //@Transactional
     public void getReviews() {
         Movie movie = Movie.builder().mno(2L).build();
         List<Review> result = reviewRepository.findByMovie(movie);

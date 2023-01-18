@@ -17,8 +17,51 @@
       </div>
       <button type="submit" class="btn btn-primary">Submit</button>
     </form>
+    <div class = "uploadResult"><ul></ul></div>
+    <style>
+      .uploadResult {
+        width: 100%;
+        background-color: gray;
+        margin-top: 10px;
+      }
+      .uploadResult ul {
+        display: flex;
+        flex-flow: row;
+        justify-content: center;
+        align-items: center;
+        vertical-align: top;
+      }
+      .uploadResult ul li {
+        list-style: none;
+        padding: 10px;
+        margin-left: 2em;
+      }
+      .uploadResult ul li img {
+        width: 100px;
+      }
+    </style>
     <script>
-      $(document).ready(function(e) {
+
+      // 이미지 업로드 결과를 받아서 출력해주는 함수
+      const showResult = (uploadResultArr) => {
+        // 출력할 영역
+        let uploadUL = $(".uploadResult ul");
+        // 출력할 내용
+        let str ="";
+        $(uploadResultArr).each((i, obj) => { // 배열 순회하기
+          str += "<li data-name=\'" + obj.fileName + "' data-path='" + obj. uploadPath + "' data-uuid='" + obj.uuid + "'>";
+          str + " <div>";
+          str += "<button type='button' data-file=\'" + obj.imageURL + "\' "
+          str += "class='btn-warning btn-sm'>X</button><br>";
+          str += "<img src='/display?filename=" + obj.thumbnailURL + "'>";
+          str += "</div>";
+          str + "</li>";
+        });
+        uploadUL.append(str);
+      };
+
+
+      $(document).ready((e) => {
         // 제외할 확장자를 위한 정규식
         // . 다음에 exe, sh, zip, alz, tiff로 끝나게 되는 정규식이다.
         let regex = new RegExp("(.*?)\.(exe|sh|zip|alz|tiff)$");
@@ -82,12 +125,54 @@
             dataType:'json',
             success: (result) => {
               console.log(result);
+              // 결과 데이터 출력하기
+              showResult(result);
             },
             error: (jqXHR, textstatus, errorThrown) => {
               console.log(textStatus);
             }
           }); //$.ajax
         }); //end change event
+
+        // 이미지 위의 삭제 버튼 이벤트
+        $(".uploadResult ").on("click", "li button", function(e){
+          console.log("delete file");
+          // data-file의 값을 가져오기
+          let targetFile = $(this).data("file");
+          // 자신을 포함하는 li 태그를 찾기
+          let targetLi = $(this).closest("li");
+
+          $.ajax({
+            url: '/removefile',
+            data: {fileName: targetFile},
+            dataType:'text',
+            type: 'POST',
+            success: function(result){
+              targetLi.remove();
+            }
+          }); //$.ajax
+        });
+
+        // 이미지 등록 버튼 이벤트
+        $(".btn-primary").on("click", function(e) {
+          e.preventDefault();
+          let str = "";
+          if($(".uploadResult li").length > 3){
+            alert("3개의 이미지만 첨부가 가능합니다.");
+            return;
+          }
+          $(".uploadResult li").each(function(i,obj){
+            let target = $(obj);
+            let imsi = 'imageDTOList[' + i + '].imgName';
+            str += "<input type='hidden' " + "name=\'" + imsi + "\' " + "value=\'" + target.data('name') +"\'>";
+            imsi = 'imageDTOList[' + i + '].path';
+            str += "<input type='hidden' " + "name=\'" + imsi + "\' " + "value=\'" + target.data('path') +"\'>";
+            imsi = 'imageDTOList[' + i + '].uuid';
+            str += "<input type='hidden' " + "name=\'" + imsi + "\' " + "value=\'" + target.data('uuid') +"\'>";
+          });
+          //태그들이 추가된 것을 확인한 후에 comment를 제거
+          $("form").append(str).submit();
+        });
       });
     </script>
   </th:block>
