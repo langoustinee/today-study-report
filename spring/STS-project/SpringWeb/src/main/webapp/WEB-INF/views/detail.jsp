@@ -28,7 +28,7 @@
 							<td width="160">${item.description}</td>
 						</tr>
 						<tr>
-							<td colspan="2" align="center" width="240"><a href="../">■목록으로 돌아가기</a></td>
+							<td colspan="2" align="center" width="240"><a href="..">■목록으로 돌아가기</a></td>
 						</tr>
 					</table>
 				</td>
