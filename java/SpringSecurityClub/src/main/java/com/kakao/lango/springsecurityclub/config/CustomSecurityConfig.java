@@ -1,5 +1,7 @@
 package com.kakao.lango.springsecurityclub.config;
 
+import com.kakao.lango.springsecurityclub.security.CustomUserDetailService;
+import com.kakao.lango.springsecurityclub.security.handler.Custom403Handler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -11,18 +13,51 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+
+import javax.sql.DataSource;
 
 @Log4j2
 @RequiredArgsConstructor
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @Configuration
 public class CustomSecurityConfig {
+
+    private final DataSource dataSource;
+    private final CustomUserDetailService customUserDetailService;
+
+    @Bean
+    public PersistentTokenRepository persistentTokenRepository() {
+        JdbcTokenRepositoryImpl repo = new JdbcTokenRepositoryImpl();
+        repo.setDataSource(dataSource);
+        return repo;
+    }
+
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler() {
+        return new Custom403Handler();
+    }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         log.info("[CustomSecurityConfig] filter setting");
-
         // 인증이나 인가에 문제가 발생하면 로그인 폼을 출력한다.
         http.formLogin().loginPage("/member/login");
+        // OAuth2 로그인 URL 설정하기
+        http.oauth2Login().loginPage("/member/login");
+        // csrf 설정하기
+        http.csrf().disable();
+        // 자동 로그인 설정하기
+        http.rememberMe()
+                .key("kakaocloudschool")
+                .tokenRepository(persistentTokenRepository())
+                .userDetailsService(customUserDetailService)
+                .tokenValiditySeconds(60 * 60 * 24 * 30);
+
+        // 403 에러 핸들어 설정하기
+        http.exceptionHandling().accessDeniedHandler(accessDeniedHandler());
 
         return http.build();
     }

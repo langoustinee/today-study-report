@@ -20,7 +20,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
      */
 
     /*
-     이름을 기반으로 생성할 수 있는 메소드
+     이름을 기반으로 생성할 수 있는 메소드 - 네임드 쿼리
     */
 
     // 영화 정보를 찾아오는 메소드

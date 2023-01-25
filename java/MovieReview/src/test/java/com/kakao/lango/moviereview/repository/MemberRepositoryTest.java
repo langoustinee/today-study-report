@@ -29,4 +29,11 @@ public class MemberRepositoryTest {
         });
     }
 
+    @Test
+    public void findMember() {
+        String nickname = "Reviewer@1";
+        Member member = memberRepository.findMemberByNickname(nickname);
+        System.out.println(member);
+    }
+
 }

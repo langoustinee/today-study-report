@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Join Page</title>
+</head>
+<body>
+  <div>
+    <h1><div class="card-header">Member Join</div></h1>
+    <fieldset>
+      <legend>input form</legend>
+      <form id="registerForm" action="/member/join" method="post">
+        <div>
+          <span>ID</span>
+          <input type="text" name="mid" id="mid">
+        </div>
+        <div>
+          <span>Password</span>
+          <input type="password" name="mpw">
+        </div>
+        <div>
+          <span >Email</span>
+          <input type="email" name="email">
+        </div>
+        <div>
+          <span >Name</span>
+          <input type="text" name="name">
+        </div>
+        <div>
+          <div class="float-end">
+            <button type="submit">register</button>
+            <button type="reset">clear</button>
+          </div>
+        </div>
+      </form>
+    </fieldset>
+  </div>
+</body>
+<script th:inline="javascript">
+  const error = [[${error}]];
+  if(error){
+    alert("동일한 mid를 가진 계정이 존재합니다.")
+  }
+
+  const dto = [[${dto}]];
+  if (dto) {
+    document.getElementById("mid").value = dto.mid;
+  }
+</script>
+</html>
