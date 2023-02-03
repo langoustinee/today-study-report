@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: my-nfs-pvc # Pod에서 명시될 대상
+spec:
+  storageClassName: ""
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pvc-pod
+spec:
+  containers:
+    - name: nfs-mount-container
+      image: nginx
+      volumeMounts:
+        - name: nfs-volume
+          mountPath: /mnt
+  volumes:
+    - name: nfs-volume
+      persistentVolumeClaim:
+        claimName: my-nfs-pvc # 위에서 생성한 PVC의 이름

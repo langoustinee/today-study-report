@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-pv
+spec:
+  capacity:
+    storage: 1Gi # 용량 1G
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain # 유지와 관련된 속성
+  nfs:
+    path: /shared/pv1
+    server: 192.168.0.221 #본인 마스터노드(/shared폴더가 있는 서버)의 주소
+    readOnly: false

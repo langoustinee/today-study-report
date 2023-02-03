@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: exam-pv
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
+    path: /shared/exam # 해당 공유폴더는 실제로 존재해야 한다.
+    server: 192.168.0.221 #본인 마스터노드(/shared폴더가 있는 서버)의 주소
+    readOnly: false

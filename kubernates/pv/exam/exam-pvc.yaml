@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: exam-pvc # Pod에서 명시될 대상
+spec:
+  storageClassName: ""
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: exam-pod
+spec:
+  containers:
+    - name: exam-container
+      image: rapa1.iptime.org:5000/nginx
+      volumeMounts:
+        - name: exam-volume
+          mountPath: /remote
+  volumes:
+    - name: exam-volume
+      persistentVolumeClaim:
+        claimName: exam-pvc
