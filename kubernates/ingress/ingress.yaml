@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+    - host: rapa.com
+      http:
+        paths:
+          - path: /h
+            pathType: Prefix
+            backend:
+              service:
+                name: h-svc
+                port:
+                  number: 80
+          - path: /ip
+            pathType: Prefix
+            backend:
+              service:
+                name: ip-svc
+                port:
+                  number: 80
