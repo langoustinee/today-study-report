@@ -1,0 +1,30 @@
+sudo apt-get install jq
+echo $(kubectl get secret $(kubectl get secret | grep mtj-kdt-kakao | awk '{print $1}' ) -o json|jq -r .data.token) | base64 --decode && echo
+
+cd /home/ubuntu/mtj/pki
+{
+  kubectl config set-cluster ted-k8s-tls-example \
+    --certificate-authority=ca.crt \
+    --embed-certs=true \
+    --server=https://172.31.18.221:6443 \
+    --kubeconfig=mtj-token.kubeconfig
+ 
+  kubectl config set-credentials mtj-token \
+    --token={{ decodedToken }}2) \
+    --kubeconfig=mtj-token.kubeconfig
+    
+  kubectl config set-context token-context \
+    --cluster=ted-k8s-tls-example \
+    --user=mtj-token \
+    --kubeconfig=mtj-token.kubeconfig
+ 
+  kubectl config use-context token-context --kubeconfig=mtj-token.kubeconfig
+}
+
+kubectl get nodes --kubeconfig=mtj-token.kubeconfig
+
+
+kubectl label node ted-kdt-kubeadm-master-1 mtj=mine --kubeconfig mtj-token.kubeconfig --overwrite
+
+
+
