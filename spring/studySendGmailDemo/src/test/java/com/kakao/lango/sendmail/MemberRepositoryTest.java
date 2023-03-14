@@ -22,6 +22,7 @@ public class MemberRepositoryTest {
     public void save() {
         IntStream.rangeClosed(1, 3).forEach(i -> {
             Member member = Member.builder()
+                    .memberName("member"+i)
                     .password(passwordEncoder.encode("kakao123"))
                     .build();
             memberRepository.save(member);

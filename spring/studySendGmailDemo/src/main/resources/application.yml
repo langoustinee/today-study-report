@@ -34,3 +34,8 @@ logging:
             sql: trace
       springframework:
         security: trace
+
+com:
+  kakao:
+    lango:
+      secret: lango1234567890

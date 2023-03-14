@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<button id="btn1">generateToken</button>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+    document.getElementById("btn1").addEventListener("click",()=> {
+        const data = {
+            memberName: "member1",
+            password: "kakao123"
+        }
+        axios.post("http://localhost:8888/generateToken", data);
+    });
+</script>
+</body>
+</html>

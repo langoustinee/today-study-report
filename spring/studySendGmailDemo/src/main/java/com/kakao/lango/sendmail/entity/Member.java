@@ -13,10 +13,11 @@ import lombok.*;
 @Getter
 @Entity
 public class Member {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String memberId;
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private Long mid;
 
+    @Id
     private String memberName;
 
     private String password;

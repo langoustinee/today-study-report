@@ -22,12 +22,11 @@ public class MemberDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<Member> result = memberRepository.findByMemberName(username);
-        Member member = result.orElseThrow(() -> new
-                UsernameNotFoundException("Cannot find mid"));
-        log.info("APIUserDetailsService apiUser-------------------------------------");
+        Optional<Member> result = memberRepository.findById(username);
+        Member member = result.orElseThrow(() -> new UsernameNotFoundException("Cannot find memberName"));
+        log.info("MemberDetailsService apiUser-------------------------------------");
         MemberDto dto = new MemberDto(
-                member.getMemberId(),
+                member.getMemberName(),
                 member.getPassword(),
                 List.of(new SimpleGrantedAuthority("ROLE_USER")));
         log.info(dto);

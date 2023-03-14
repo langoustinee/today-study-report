@@ -12,12 +12,12 @@ import java.util.Collection;
 @Setter
 @ToString
 public class MemberDto extends User {
-    private String memberId;
+    private String memberName;
     private String password;
 
     public MemberDto(String username, String password, Collection<? extends GrantedAuthority> authorities) {
         super(username, password, authorities);
-        this.memberId = username;
+        this.memberName = username;
         this.password = password;
     }
 }
