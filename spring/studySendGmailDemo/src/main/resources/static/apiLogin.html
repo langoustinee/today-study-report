@@ -13,7 +13,15 @@
             memberName: "member1",
             password: "kakao123"
         }
-        axios.post("http://localhost:8888/generateToken", data);
+        axios.post("http://localhost:8888/generateToken", data)
+            .then(res => {
+                const accessToken = res.data.accessToken;
+                const refreshToken = res.data.refreshToken;
+                localStorage.setItem("accessToken", accessToken);
+                localStorage.setItem("refreshToken", refreshToken);
+                console.log("accessToken: ", accessToken);
+                console.log("refreshToken: ", refreshToken);
+            })
     });
 </script>
 </body>
