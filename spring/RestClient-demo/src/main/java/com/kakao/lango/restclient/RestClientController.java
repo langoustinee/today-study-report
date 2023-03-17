@@ -26,7 +26,6 @@ public class RestClientController {
         // List를 결과로 줄 수 있지만 Map으로 주는게 Restful한 응답방식이다.
         Map<String, Object> res = new HashMap<>();
         res.put("result", false);
-
         try {
             // 다운로드 받을 URL
             String urlAddr = "https://dapi.kakao.com/v3/search/book?target=title&query=";
@@ -65,7 +64,7 @@ public class RestClientController {
                 }
             }
             String json = sb.toString();
-            System.out.printf("%s\n", json);
+//            System.out.printf("%s\n", json);
 
             // 첫번째 파싱
             JSONObject jsonObject = new JSONObject(json);
@@ -74,20 +73,21 @@ public class RestClientController {
             JSONArray documents = jsonObject.getJSONArray("documents");
 
             // 배열을 순회하기
-            Map<String, Object> map = new HashMap<>();
-            for(int i=0; i<documents.length(); i++){
+            for(int i=0; i<documents.length(); i++) {
                 JSONObject object = documents.getJSONObject(i);
-
+                Map<String, Object> map = new HashMap<>();
                 map.put("title", object.getString("title"));
                 map.put("price", object.getLong("price"));
+                System.out.println(map);
                 list.add(map);
             }
         } catch (Exception e) {
             System.out.printf("에러 발생:%s\n", e.getMessage());
         }
+        System.out.println(list);
         res.put("data", list);
         res.put("result", true);
-        System.out.println(res);
+//        System.out.println(res);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 }
