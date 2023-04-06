@@ -1,0 +1,73 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# production
+/build
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+
+# https://www.toptal.com/developers/gitignore/api/react,windows에서 생성
+# https://www.toptal.com/developers/gitignore?templates=react,windows에서 편집
+
+### 반응 ###
+.DS_*
+*.통나무
+로그
+**/*.지원.*
+**/*.뒤쪽에.*
+
+node_modules
+bower_components
+
+*.숭고한*
+
+psd
+무지
+스케치
+
+### 윈도우 ###
+# Windows 썸네일 캐시 파일
+Thumbs.db
+Thumbs.db:암호화 가능
+ehthumbs.db
+ehthumbs_vista.db
+
+# 덤프 파일
+*.stackdump
+
+# 폴더 구성 파일
+[DD]esktop.ini
+
+# 파일 공유에 사용되는 휴지통
+$RECLECLE.BIN/
+
+# 윈도우 인스톨러 파일
+*.택시
+*.msi
+*.msix
+*.msm
+*.msp
+
+# 윈도우 단축키
+*.lnk
+
+# https://www.toptal.com/developers/gitignore/api/react,windows 끝
+
+.env
